@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/dlclark/regexp2"
 )
 
 func GetEncoding(encodingName string) (*Tiktoken, error) {
@@ -36,41 +38,42 @@ func EncodingForModel(modelName string) (*Tiktoken, error) {
 type Tiktoken struct {
 	bpe              *CoreBPE
 	pbeEncoding      *Encoding
-	specialTokensSet map[string]bool
+	specialTokensSet map[string]any
 }
 
-func (t *Tiktoken) Encode(text string, allowedSpecial interface{}, disallowedSpecial interface{}) []int {
+func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecial []string) []int {
 	var allowedSpecialSet map[string]any
-	switch v := allowedSpecial.(type) {
-	case string:
-		if v == "all" {
-			allowedSpecialSet = make(map[string]any, len(t.specialTokensSet))
-			for token := range t.specialTokensSet {
-				allowedSpecialSet[token] = true
-			}
+	if len(allowedSpecial) == 0 {
+		allowedSpecialSet = map[string]any{}
+	} else if len(disallowedSpecial) == 1 && disallowedSpecial[0] == "all" {
+		allowedSpecialSet = t.specialTokensSet
+	} else {
+		allowedSpecialSet = map[string]any{}
+		for _, v := range allowedSpecial {
+			allowedSpecialSet[v] = nil
 		}
-	case map[string]any:
-		allowedSpecialSet = v
 	}
 
-	var disallowedSpecialSet map[string]bool
-	switch v := disallowedSpecial.(type) {
-	case string:
-		if v == "all" {
-			disallowedSpecialSet = make(map[string]bool, len(t.specialTokensSet))
-			for token := range t.specialTokensSet {
-				disallowedSpecialSet[token] = true
+	var disallowedSpecialSet map[string]any
+	if len(disallowedSpecial) == 0 || (len(disallowedSpecial) == 1 && disallowedSpecial[0] == "all") {
+		disallowedSpecialSet = map[string]any{}
+		for k1 := range t.specialTokensSet {
+			if _, ok := allowedSpecialSet[k1]; !ok {
+				disallowedSpecialSet[k1] = nil
 			}
 		}
-	case map[string]bool:
-		disallowedSpecialSet = v
+	} else {
+		disallowedSpecialSet = map[string]any{}
+		for _, v := range disallowedSpecial {
+			disallowedSpecialSet[v] = nil
+		}
 	}
 
-	if disallowedSpecialSet != nil {
-		specialTokenRegex := t.SpecialTokenRegex(disallowedSpecialSet)
-		match := specialTokenRegex.FindString(text)
-		if match != "" {
-			panic(fmt.Sprintf("Disallowed special token found: %v", match))
+	if len(disallowedSpecialSet) > 0 {
+		specialRegex := t.SpecialTokenRegex(disallowedSpecialSet)
+		m := findRegex2StringMatch(text, specialRegex)
+		if m != "" {
+			panic(fmt.Sprintf("text contains disallowed special token %s", m))
 		}
 	}
 
@@ -78,11 +81,20 @@ func (t *Tiktoken) Encode(text string, allowedSpecial interface{}, disallowedSpe
 	return tokens
 }
 
-func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]bool) *regexp.Regexp {
+func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regexp2.Regexp {
 	specialRegexStrs := make([]string, 0, len(disallowedSpecialSet))
 	for k := range disallowedSpecialSet {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
 	}
-	specialRegex, _ := regexp.Compile(strings.Join(specialRegexStrs, "|"))
+	specialRegex, _ := regexp2.Compile(strings.Join(specialRegexStrs, "|"), regexp2.None)
 	return specialRegex
+}
+
+func findRegex2StringMatch(text string, reg *regexp2.Regexp) string {
+	m, _ := reg.FindStringMatch(text)
+	if m == nil {
+		return ""
+	}
+
+	return m.String()
 }

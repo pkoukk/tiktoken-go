@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/dlclark/regexp2"
 )
 
 type CoreBPE struct {
@@ -14,13 +16,13 @@ type CoreBPE struct {
 	decoder              map[int]string
 	specialTokensEncoder map[string]int
 	specialTokensDecoder map[int]string
-	tlRegex              *regexp.Regexp
-	tlSpecialRegex       *regexp.Regexp
+	tlRegex              *regexp2.Regexp
+	tlSpecialRegex       *regexp2.Regexp
 	sortedTokenBytes     [][]byte
 }
 
 func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, pattern string) (*CoreBPE, error) {
-	regex, err := regexp.Compile(pattern)
+	regex, err := regexp2.Compile(pattern, regexp2.None)
 	if err != nil {
 		return nil, fmt.Errorf("error compiling regex: %s", err)
 	}
@@ -29,7 +31,7 @@ func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, pat
 	for k := range specialTokensEncoder {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
 	}
-	specialRegex, err := regexp.Compile(strings.Join(specialRegexStrs, "|"))
+	specialRegex, err := regexp2.Compile(strings.Join(specialRegexStrs, "|"), regexp2.None)
 	if err != nil {
 		return nil, fmt.Errorf("error compiling special regex: %s", err)
 	}
@@ -79,9 +81,10 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 		startFind := start
 		for {
 			// Find the next allowed special token, if any
-			nextSpecial = specialRegex.FindStringIndex(text[startFind:])
+			temp := cutTextInRune(text, startFind, len([]rune(text)))
+			nextSpecial = findRegex2StringIndex(temp, specialRegex)
 			if nextSpecial != nil {
-				token := text[startFind+nextSpecial[0] : startFind+nextSpecial[1]]
+				token := cutTextInRune(text, startFind+nextSpecial[0], startFind+nextSpecial[1])
 				if _, ok := allowedSpecial[token]; ok {
 					break
 				}
@@ -91,14 +94,14 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 			}
 		}
 
-		end := len(text)
+		end := len([]rune(text))
 		if nextSpecial != nil {
 			end = start + nextSpecial[0]
 		}
 
 		// Okay, here we go, compare this logic to _encode_ordinary_native
-		for _, mat := range regex.FindAllStringSubmatchIndex(text[start:end], -1) {
-			piece := text[start+mat[0] : start+mat[1]]
+		for _, mat := range findRegex2AllStringMatchIndex(cutTextInRune(text, start, end), regex) {
+			piece := cutTextInRune(text, start+mat[0], start+mat[1])
 			if token, ok := bp.encoder[piece]; ok {
 				lastPieceTokenLen = 1
 				ret = append(ret, token)
@@ -110,7 +113,8 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 		}
 
 		if nextSpecial != nil {
-			token := bp.specialTokensEncoder[text[start+nextSpecial[0]:start+nextSpecial[1]]]
+			temp := cutTextInRune(text, start+nextSpecial[0], start+nextSpecial[1])
+			token := bp.specialTokensEncoder[temp]
 			ret = append(ret, token)
 			start = start + nextSpecial[1]
 			lastPieceTokenLen = 0
@@ -132,4 +136,39 @@ func (bpe *CoreBPE) decodeNative(tokens []int) []byte {
 		ret = append(ret, tokenBytes...)
 	}
 	return ret
+}
+
+func findRegex2StringIndex(text string, reg *regexp2.Regexp) []int {
+	m, _ := reg.FindStringMatch(text)
+	if m == nil {
+		return nil
+	}
+	result := make([]int, 2)
+	result[0] = m.Index
+	result[1] = m.Index + m.Length
+	return result
+}
+
+func findRegex2AllStringMatchIndex(text string, reg *regexp2.Regexp) [][]int {
+	var matches [][]int
+	m, _ := reg.FindStringMatch(text)
+	for m != nil {
+		result := make([]int, 2)
+		result[0] = m.Index
+		result[1] = m.Index + m.Length
+		matches = append(matches, result)
+		m, _ = reg.FindNextMatch(m)
+	}
+	return matches
+}
+
+func cutTextInRune(text string, start, end int) string {
+	runes := []rune(text)
+	if start < 0 {
+		start = 0
+	}
+	if end > len(runes) {
+		end = len(runes)
+	}
+	return string(runes[start:end])
 }

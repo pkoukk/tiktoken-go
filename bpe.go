@@ -1,6 +1,8 @@
 package tiktoken
 
-import "math"
+import (
+	"math"
+)
 
 func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end int) T) []T {
 	parts := make([][2]int, len(piece)+1)
@@ -10,7 +12,8 @@ func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end 
 
 	getRank := func(startIdx, skip int) int {
 		if startIdx+skip+2 < len(parts) {
-			rank, ok := ranks[string(piece[parts[startIdx][0]:parts[startIdx+skip+2][0]])]
+			b := piece[parts[startIdx][0]:parts[startIdx+skip+2][0]]
+			rank, ok := ranks[string(b)]
 			if ok {
 				return rank
 			}
@@ -34,9 +37,19 @@ func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end 
 
 		if minRank < math.MaxInt {
 			i := minIdx
-			parts[i][1] = getRank(i, 1)
+			rank := getRank(i, 1)
+			if rank >= 0 {
+				parts[i][1] = rank
+			} else {
+				parts[i][1] = math.MaxInt
+			}
 			if i > 0 {
-				parts[i-1][1] = getRank(i-1, 1)
+				rk := getRank(i-1, 1)
+				if rk >= 0 {
+					parts[i-1][1] = rk
+				} else {
+					parts[i-1][1] = math.MaxInt
+				}
 			}
 			parts = append(parts[:i+1], parts[i+2:]...)
 		} else {
@@ -58,14 +71,5 @@ func bytePairEncode(piece []byte, ranks map[string]int) []int {
 	}
 	return bytePairMerge(piece, ranks, func(start, end int) int {
 		return ranks[string(piece[start:end])]
-	})
-}
-
-func bytePairDecode(piece []byte, ranks map[string]int) [][]byte {
-	if len(piece) == 1 {
-		return [][]byte{piece}
-	}
-	return bytePairMerge(piece, ranks, func(start, end int) []byte {
-		return piece[start:end]
 	})
 }
