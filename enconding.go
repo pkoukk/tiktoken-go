@@ -1,0 +1,102 @@
+package tiktoken
+
+import "errors"
+
+const ENDOFTEXT string = "<|endoftext|>"
+const FIM_PREFIX string = "<|fim_prefix|>"
+const FIM_MIDDLE string = "<|fim_middle|>"
+const FIM_SUFFIX string = "<|fim_suffix|>"
+const ENDOFPROMPT string = "<|endofprompt|>"
+
+var MODEL_TO_ENCODING = map[string]string{
+	// chat
+	"gpt-3.5-turbo": "cl100k_base",
+	// text
+	"text-davinci-003": "p50k_base",
+	"text-davinci-002": "p50k_base",
+	"text-davinci-001": "r50k_base",
+	"text-curie-001":   "r50k_base",
+	"text-babbage-001": "r50k_base",
+	"text-ada-001":     "r50k_base",
+	"davinci":          "r50k_base",
+	"curie":            "r50k_base",
+	"babbage":          "r50k_base",
+	"ada":              "r50k_base",
+	// code
+	"code-davinci-002": "p50k_base",
+	"code-davinci-001": "p50k_base",
+	"code-cushman-002": "p50k_base",
+	"code-cushman-001": "p50k_base",
+	"davinci-codex":    "p50k_base",
+	"cushman-codex":    "p50k_base",
+	// edit
+	"text-davinci-edit-001": "p50k_edit",
+	"code-davinci-edit-001": "p50k_edit",
+	// embeddings
+	"text-embedding-ada-002": "cl100k_base",
+	// old embeddings
+	"text-similarity-davinci-001":  "r50k_base",
+	"text-similarity-curie-001":    "r50k_base",
+	"text-similarity-babbage-001":  "r50k_base",
+	"text-similarity-ada-001":      "r50k_base",
+	"text-search-davinci-doc-001":  "r50k_base",
+	"text-search-curie-doc-001":    "r50k_base",
+	"text-search-babbage-doc-001":  "r50k_base",
+	"text-search-ada-doc-001":      "r50k_base",
+	"code-search-babbage-code-001": "r50k_base",
+	"code-search-ada-code-001":     "r50k_base",
+	// open source
+	"gpt2": "gpt2",
+}
+
+type Encoding struct {
+	Name           string
+	PatStr         string
+	MergeableRanks map[string]int
+	SpecialTokens  map[string]int
+	ExplicitNVocab int
+}
+
+func getEncoding(encodingName string) (*Encoding, error) {
+	encoding, ok := ENCODING_MAP[encodingName]
+	if !ok {
+		initEncoding, err := initEncoding(encodingName)
+		if err != nil {
+			return nil, err
+		}
+		encoding = initEncoding
+		ENCODING_MAP[encodingName] = encoding
+	}
+	return encoding, nil
+}
+
+func initEncoding(encodingName string) (*Encoding, error) {
+	switch encodingName {
+	case "cl100k_base":
+		return cl100k_base()
+	default:
+		return nil, errors.New("Unknown encoding: " + encodingName)
+	}
+}
+
+func cl100k_base() (*Encoding, error) {
+	ranks, err := loadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken")
+	if err != nil {
+		return nil, err
+	}
+	special_tokens := map[string]int{
+		ENDOFTEXT:   100257,
+		FIM_PREFIX:  100258,
+		FIM_MIDDLE:  100259,
+		FIM_SUFFIX:  100260,
+		ENDOFPROMPT: 100276,
+	}
+	return &Encoding{
+		Name:           "cl100k_base",
+		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`,
+		MergeableRanks: ranks,
+		SpecialTokens:  special_tokens,
+	}, nil
+}
+
+var ENCODING_MAP = map[string]*Encoding{}
