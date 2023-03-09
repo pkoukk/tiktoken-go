@@ -133,7 +133,9 @@ func (bpe *CoreBPE) decodeNative(tokens []int) []byte {
 		if !ok {
 			tokenBytes = bpe.specialTokensDecoder[token]
 		}
-		ret = append(ret, tokenBytes...)
+		if len(tokenBytes) > 0 {
+			ret = append(ret, tokenBytes...)
+		}
 	}
 	return ret
 }
