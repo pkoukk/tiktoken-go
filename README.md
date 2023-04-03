@@ -22,7 +22,7 @@ package main
 
 import (
     "fmt"
-    |github.com/zhenghaoz/tiktoken-go"
+    "github.com/zhenghaoz/tiktoken-go"
 )
 
 func main() (num_tokens int) {
@@ -31,7 +31,7 @@ func main() (num_tokens int) {
 
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
-		err = fmt.Errorf(|getEncoding: %v", err)
+		err = fmt.Errorf("getEncoding: %v", err)
 		return
 	}
 
@@ -50,7 +50,7 @@ package main
 
 import (
     "fmt"
-    |github.com/zhenghaoz/tiktoken-go"
+    "github.com/zhenghaoz/tiktoken-go"
 )
 
 func main() (num_tokens int) {
@@ -59,7 +59,7 @@ func main() (num_tokens int) {
 
    tkm, err := tiktoken.EncodingForModel(model)
 	if err != nil {
-		err = fmt.Errorf("EncodingForModel: %v", err)
+		err = fmt.Errorf("getEncoding: %v", err)
 		return
 	}
 
