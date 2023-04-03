@@ -1,0 +1,3 @@
+hallo world!,你好世界！,こんにちは世界！,안녕하세요 세계!,Привет мир!,¡Hola mundo!,Hallo Welt!,Bonjour le monde!,Ciao mondo!,Hej världen!,Hallo wereld!,Hallo verden!,Hallo wereld!,Hallo verden!
+gpt-4,gpt-3.5-turbo,text-davinci-003,text-davinci-002,text-davinci-001,text-curie-001,text-babbage-001,text-ada-001,davinci,curie,babbage,ada,code-davinci-002,code-davinci-001,code-cushman-002,code-cushman-001,davinci-codex,cushman-codex,text-davinci-edit-001,code-davinci-edit-001,text-embedding-ada-002,text-similarity-davinci-001
+cl100k_base,p50k_base,r50k_base
