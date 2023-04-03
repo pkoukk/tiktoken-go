@@ -10,7 +10,7 @@ This is a port of the original [tiktoken](https://github.com/openai/tiktoken).
 ## Install
 
 ```bash
-go get github.com/zhenghaoz/tiktoken-go
+go get github.com/pkoukk/tiktoken-go
 ```
 
 ## Example
@@ -22,7 +22,7 @@ package main
 
 import (
     "fmt"
-    "github.com/zhenghaoz/tiktoken-go"
+    "github.com/pkoukk/tiktoken-go"
 )
 
 func main() (num_tokens int) {
@@ -50,7 +50,7 @@ package main
 
 import (
     "fmt"
-    "github.com/zhenghaoz/tiktoken-go"
+    "github.com/pkoukk/tiktoken-go"
 )
 
 func main() (num_tokens int) {

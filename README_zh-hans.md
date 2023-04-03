@@ -9,7 +9,7 @@ tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).
 
 
 ```bash
-go get github.com/zhenghaoz/tiktoken-go
+go get github.com/pkoukk/tiktoken-go
 ```
 
 ## 例子
@@ -21,7 +21,7 @@ package main
 
 import (
     "fmt"
-    "github.com/zhenghaoz/tiktoken-go"
+    "github.com/pkoukk/tiktoken-go"
 )
 
 func main() (num_tokens int) {
@@ -49,7 +49,7 @@ package main
 
 import (
     "fmt"
-    "github.com/zhenghaoz/tiktoken-go"
+    "github.com/pkoukk/tiktoken-go"
 )
 
 func main() (num_tokens int) {
