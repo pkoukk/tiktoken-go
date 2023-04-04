@@ -1,19 +1,18 @@
 # tiktoken-go
-[简体中文](./README_zh-hans.md)
+Go 语言版本的 OpenAI 的 tiktoken。  
+帮你把文本转换成 OpenAI 的模型可以识别的 token。  
+tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).  
 
-OpenAI's tiktoken in Go.  
-Tiktoken is a fast BPE tokeniser for use with OpenAI's models.  
-This is a port of the original [tiktoken](https://github.com/openai/tiktoken).  
+# 用法
 
-# Usage
+## 安装
 
-## Install
 
 ```bash
 go get github.com/pkoukk/tiktoken-go
 ```
 
-## Example
+## 例子
 
 ### get token by encoding
 
@@ -31,7 +30,7 @@ func main() (num_tokens int) {
 
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
-		err = fmt.Errorf("getEncoding: %v", err)
+		err = fmt.Errorf("GetEncoding: %v", err)
 		return
 	}
 
@@ -59,7 +58,7 @@ func main() (num_tokens int) {
 
    tkm, err := tiktoken.EncodingForModel(model)
 	if err != nil {
-		err = fmt.Errorf("getEncoding: %v", err)
+		err = fmt.Errorf(": %v", err)
 		return
 	}
 
@@ -70,6 +69,7 @@ func main() (num_tokens int) {
     num_tokens = len(token)
 }
 ```
+
 # available encodings
  | Encoding name           | OpenAI models                                      |
 |-------------------------|-----------------------------------------------------|
@@ -115,13 +115,7 @@ func main() (num_tokens int) {
 |code-search-ada-code-001|     r50k_base|
 |gpt2| gpt2|
 
-
-
-# Test
-> you can run text in [test](./test) folder
-
-
-# compare with original [tiktoken](https://github.com/openai/tiktoken)
+# 与官方 [tiktoken](https://github.com/openai/tiktoken) 的对比
 
 ## get token by encoding
 

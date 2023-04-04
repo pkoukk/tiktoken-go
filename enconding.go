@@ -12,7 +12,7 @@ const ENDOFPROMPT string = "<|endofprompt|>"
 
 var MODEL_TO_ENCODING = map[string]string{
 	// chat
-	"gpt-4": "cl100k_base",
+	"gpt-4":         "cl100k_base",
 	"gpt-3.5-turbo": "cl100k_base",
 	// text
 	"text-davinci-003": "p50k_base",
