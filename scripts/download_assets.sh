@@ -17,6 +17,6 @@ EOF
 # Download assets
 echo "Downloading assets..."
 for asset in $ASSETS; do
-    echo "Downloading $asset..."
-    curl --proto '=https' --tlsv1.2 -SfL -o "./assets/$(basename $asset)" $asset
+    echo "Downloading $asset"
+    curl -sSL -f -o "./assets/$(basename $asset)" $asset
 done
