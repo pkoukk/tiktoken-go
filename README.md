@@ -11,6 +11,8 @@ This is a port of the original [tiktoken](https://github.com/openai/tiktoken).
 
 ```bash
 go get github.com/pkoukk/tiktoken-go
+# default tiktoken need download token dictionary from openai website, if you want use this lib offline, use embed branch instead
+go get github.com/pkoukk/tiktoken-go@embed
 ```
 
 ## Example
