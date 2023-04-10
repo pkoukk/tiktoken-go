@@ -10,6 +10,8 @@ tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).
 
 ```bash
 go get github.com/pkoukk/tiktoken-go
+# 默认的tiktoken需要从openai下载token字典，如果想要离线使用，可以使用以下分支
+go get github.com/pkoukk/tiktoken-go@embed
 ```
 
 ## 例子
