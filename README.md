@@ -1,8 +1,10 @@
 # tiktoken-go
 [简体中文](./README_zh-hans.md)
 
-OpenAI's tiktoken in Go.  
-Tiktoken is a fast BPE tokeniser for use with OpenAI's models.  
+OpenAI's tiktoken in Go. 
+
+Tiktoken is a fast BPE tokeniser for use with OpenAI's models.
+
 This is a port of the original [tiktoken](https://github.com/openai/tiktoken).  
 
 # Usage
@@ -16,9 +18,12 @@ go get github.com/pkoukk/tiktoken-go
 go get github.com/pkoukk/tiktoken-go@embed
 ```
 ## Cache
-Tiktoken-go has the same cache mechanism as the original Tiktoken library.   
+Tiktoken-go has the same cache mechanism as the original Tiktoken library.  
+
 You can set the cache directory by using the environment variable TIKTOKEN_CACHE_DIR.   
+
 Once this variable is set, tiktoken-go will use this directory to cache the token dictionary.   
+
 If you don't set this environment variable, tiktoken-go will download the dictionary each time you initialize an encoding for the first time.  
 
 ## Example
@@ -76,6 +81,62 @@ func main() (num_tokens int) {
 
     // num_tokens
     num_tokens = len(token)
+}
+```
+### counting tokens for chat API calls
+Below is an example function for counting tokens for messages passed to gpt-3.5-turbo-0301 or gpt-4-0314.
+
+The following code was written by @nasa1024 based on [openai-cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)     examples.
+
+Please note that the token calculation method for the message may change at any time, so this code may not necessarily be applicable in the future.
+
+If you need accurate calculation, please refer to the official documentation.
+
+If you find that this code is no longer applicable, please feel free to submit a PR or Issue.
+
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/pkoukk/tiktoken-go"
+	"github.com/sashabaranov/go-openai"
+)
+
+func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string) (num_tokens int) {
+	tkm, err := tiktoken.EncodingForModel(model)
+	if err != nil {
+		err = fmt.Errorf("EncodingForModel: %v", err)
+		fmt.Println(err)
+		return
+	}
+
+	var tokens_per_message int
+	var tokens_per_name int
+	if model == "gpt-3.5-turbo-0301" || model == "gpt-3.5-turbo" {
+		tokens_per_message = 4
+		tokens_per_name = -1
+	} else if model == "gpt-4-0314" || model == "gpt-4" {
+		tokens_per_message = 3
+		tokens_per_name = 1
+	} else {
+		fmt.Println("Warning: model not found. Using cl100k_base encoding.")
+		tokens_per_message = 3
+		tokens_per_name = 1
+	}
+
+	for _, message := range messages {
+		num_tokens += tokens_per_message
+		num_tokens += len(tkm.Encode(message.Content, nil, nil))
+		num_tokens += len(tkm.Encode(message.Role, nil, nil))
+		if message.Name != "" {
+			num_tokens += tokens_per_name
+		}
+	}
+	num_tokens += 3
+	return num_tokens
 }
 ```
 
