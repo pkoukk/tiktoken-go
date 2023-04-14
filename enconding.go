@@ -52,6 +52,12 @@ var MODEL_TO_ENCODING = map[string]string{
 	"gpt2": "gpt2",
 }
 
+var MODEL_PREFIX_TO_ENCODING = map[string]string{
+	// chat
+	"gpt-4-":         "cl100k_base", // e.g., gpt-4-0314, etc., plus gpt-4-32k
+	"gpt-3.5-turbo-": "cl100k_base", // e.g, gpt-3.5-turbo-0301, -0401, etc.
+}
+
 type Encoding struct {
 	Name           string
 	PatStr         string
