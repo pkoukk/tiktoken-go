@@ -28,11 +28,16 @@ func GetEncoding(encodingName string) (*Tiktoken, error) {
 }
 
 func EncodingForModel(modelName string) (*Tiktoken, error) {
-	if encodingName, ok := MODEL_TO_ENCODING[modelName]; !ok {
-		return nil, fmt.Errorf("no encoding for model %s", modelName)
-	} else {
+	if encodingName, ok := MODEL_TO_ENCODING[modelName]; ok {
 		return GetEncoding(encodingName)
+	} else {
+		for prefix, encodingName := range MODEL_PREFIX_TO_ENCODING {
+			if strings.HasPrefix(modelName, prefix) {
+				return GetEncoding(encodingName)
+			}
+		}
 	}
+	return nil, fmt.Errorf("no encoding for model %s", modelName)
 }
 
 type Tiktoken struct {
