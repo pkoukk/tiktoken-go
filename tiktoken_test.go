@@ -10,10 +10,25 @@ func TestEncoding(t *testing.T) {
 	ass := assert.New(t)
 	enc, err := GetEncoding("cl100k_base")
 	ass.Nil(err, "Encoding  init should not be nil")
-	tokens := enc.Encode("hello world!你好，世界！", nil, nil)
+	tokens := enc.Encode("hello world!你好，世界！", []string{"all"}, []string{"all"})
 	// these tokens are converted from the original python code
 	sourceTokens := []int{15339, 1917, 0, 57668, 53901, 3922, 3574, 244, 98220, 6447}
 	ass.ElementsMatch(sourceTokens, tokens, "Encoding should be equal")
+
+	tokens = enc.Encode("hello <|endoftext|>", []string{"<|endoftext|>"}, nil)
+	sourceTokens = []int{15339, 220, 100257}
+	ass.ElementsMatch(sourceTokens, tokens, "Encoding should be equal")
+
+	tokens = enc.Encode("hello <|endoftext|>", []string{"<|endoftext|>"}, []string{"all"})
+	sourceTokens = []int{15339, 220, 100257}
+	ass.ElementsMatch(sourceTokens, tokens, "Encoding should be equal")
+
+	ass.Panics(func() {
+		tokens = enc.Encode("hello <|endoftext|><|endofprompt|>", []string{"<|endoftext|>"}, []string{"all"})
+	})
+	ass.Panics(func() {
+		tokens = enc.Encode("hello <|endoftext|>", []string{"<|endoftext|>"}, []string{"<|endoftext|>"})
+	})
 }
 
 func TestDecoding(t *testing.T) {

@@ -17,13 +17,14 @@ func GetEncoding(encodingName string) (*Tiktoken, error) {
 	if err != nil {
 		return nil, err
 	}
-	specialTokensSet := map[string]bool{}
+	specialTokensSet := map[string]any{}
 	for k := range enc.SpecialTokens {
 		specialTokensSet[k] = true
 	}
 	return &Tiktoken{
-		bpe:         pbe,
-		pbeEncoding: enc,
+		bpe:              pbe,
+		pbeEncoding:      enc,
+		specialTokensSet: specialTokensSet,
 	}, nil
 }
 
@@ -50,7 +51,7 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 	var allowedSpecialSet map[string]any
 	if len(allowedSpecial) == 0 {
 		allowedSpecialSet = map[string]any{}
-	} else if len(disallowedSpecial) == 1 && disallowedSpecial[0] == "all" {
+	} else if len(allowedSpecial) == 1 && allowedSpecial[0] == "all" {
 		allowedSpecialSet = t.specialTokensSet
 	} else {
 		allowedSpecialSet = map[string]any{}
@@ -59,19 +60,12 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 		}
 	}
 
-	var disallowedSpecialSet map[string]any
-	if len(disallowedSpecial) == 0 || (len(disallowedSpecial) == 1 && disallowedSpecial[0] == "all") {
-		disallowedSpecialSet = map[string]any{}
-		for k1 := range t.specialTokensSet {
-			if _, ok := allowedSpecialSet[k1]; !ok {
-				disallowedSpecialSet[k1] = nil
-			}
-		}
-	} else {
-		disallowedSpecialSet = map[string]any{}
-		for _, v := range disallowedSpecial {
-			disallowedSpecialSet[v] = nil
-		}
+	disallowedSpecialSet := map[string]any{}
+	for _, v := range disallowedSpecial {
+		disallowedSpecialSet[v] = nil
+	}
+	if len(disallowedSpecial) == 1 && disallowedSpecial[0] == "all" {
+		disallowedSpecialSet = difference(t.specialTokensSet, allowedSpecialSet)
 	}
 
 	if len(disallowedSpecialSet) > 0 {
@@ -95,7 +89,7 @@ func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regex
 	for k := range disallowedSpecialSet {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
 	}
-	specialRegex, _ := regexp2.Compile(strings.Join(specialRegexStrs, "|"), regexp2.None)
+	specialRegex := regexp2.MustCompile(strings.Join(specialRegexStrs, "|"), regexp2.None)
 	return specialRegex
 }
 
@@ -106,4 +100,14 @@ func findRegex2StringMatch(text string, reg *regexp2.Regexp) string {
 	}
 
 	return m.String()
+}
+
+func difference(setA, setB map[string]any) map[string]any {
+	result := make(map[string]any)
+	for k := range setA {
+		if _, ok := setB[k]; !ok {
+			result[k] = true
+		}
+	}
+	return result
 }
