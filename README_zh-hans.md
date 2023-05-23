@@ -27,25 +27,26 @@ Tiktoken-go 和原始的 Tiktoken 库一样，具有相同的缓存机制。
 package main
 
 import (
-    "fmt"
-    "github.com/pkoukk/tiktoken-go"
+	"fmt"
+
+	"github.com/pkoukk/tiktoken-go"
 )
 
-func main() (num_tokens int) {
-    text = "Hello, world!"
-    encoding = "r50k_base"
+func main() {
+	text := "Hello, world!"
+	encoding := "r50k_base"
 
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
-		err = fmt.Errorf("GetEncoding: %v", err)
+		err = fmt.Errorf("getEncoding: %v", err)
 		return
 	}
 
-    // encode
+	// encode
 	token := tke.Encode(text, nil, nil)
 
-    // num_tokens
-    num_tokens = len(token)
+	// num_tokens
+	fmt.Println(len(token))
 }
 ```
 
@@ -55,25 +56,26 @@ func main() (num_tokens int) {
 package main
 
 import (
-    "fmt"
-    "github.com/pkoukk/tiktoken-go"
+	"fmt"
+
+	"github.com/pkoukk/tiktoken-go"
 )
 
-func main() (num_tokens int) {
-    text = "Hello, world!"
-    encoding = "davinci"
+func main() {
+	text := "Hello, world!"
+	model := "davinci"
 
-   tkm, err := tiktoken.EncodingForModel(model)
+	tke, err := tiktoken.EncodingForModel(model)
 	if err != nil {
-		err = fmt.Errorf(": %v", err)
+		err = fmt.Errorf("getEncoding: %v", err)
 		return
 	}
 
-	 // encode
+	// encode
 	token := tke.Encode(text, nil, nil)
 
-    // num_tokens
-    num_tokens = len(token)
+	// num_tokens
+	fmt.Println(len(token))
 }
 ```
 
