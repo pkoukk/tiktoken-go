@@ -70,7 +70,7 @@ func main() (num_tokens int) {
 	}
 
 	 // encode
-	token := tke.Encode(text, nil, nil)
+	token := tkm.Encode(text, nil, nil)
 
     // num_tokens
     num_tokens = len(token)
