@@ -80,6 +80,10 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 	return tokens
 }
 
+func (t *Tiktoken) EncodeOrdinary(text string) []int {
+	return (t.bpe.encodeOrdinaryNative(text))
+}
+
 func (t *Tiktoken) Decode(tokens []int) string {
 	return string(t.bpe.decodeNative(tokens))
 }
