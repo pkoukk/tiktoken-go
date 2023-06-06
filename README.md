@@ -38,9 +38,9 @@ import (
     "github.com/pkoukk/tiktoken-go"
 )
 
-func main() (num_tokens int) {
-    text = "Hello, world!"
-    encoding = "r50k_base"
+func main()  {
+	text := "Hello, world!"
+	encoding := "cl100k_base"
 
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
@@ -48,11 +48,13 @@ func main() (num_tokens int) {
 		return
 	}
 
-    // encode
+	// encode
 	token := tke.Encode(text, nil, nil)
 
-    // num_tokens
-    num_tokens = len(token)
+	//tokens
+	fmt.Println((token))
+	// num_tokens
+	fmt.Println(len(token))
 }
 ```
 
@@ -66,21 +68,23 @@ import (
     "github.com/pkoukk/tiktoken-go"
 )
 
-func main() (num_tokens int) {
-    text = "Hello, world!"
-    encoding = "davinci"
+func main()  {
+	text := "Hello, world!"
+	encoding := "gpt-3.5-turbo"
 
-   tkm, err := tiktoken.EncodingForModel(model)
+	tkm, err := tiktoken.EncodingForModel(encoding)
 	if err != nil {
 		err = fmt.Errorf("getEncoding: %v", err)
 		return
 	}
 
-	 // encode
-	token := tke.Encode(text, nil, nil)
+	// encode
+	token := tkm.Encode(text, nil, nil)
 
-    // num_tokens
-    num_tokens = len(token)
+	// tokens
+	fmt.Println(token)
+	// num_tokens
+	fmt.Println(len(token))
 }
 ```
 ### counting tokens for chat API calls
