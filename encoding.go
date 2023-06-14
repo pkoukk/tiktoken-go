@@ -4,16 +4,25 @@ import (
 	"errors"
 )
 
-const ENDOFTEXT string = "<|endoftext|>"
-const FIM_PREFIX string = "<|fim_prefix|>"
-const FIM_MIDDLE string = "<|fim_middle|>"
-const FIM_SUFFIX string = "<|fim_suffix|>"
-const ENDOFPROMPT string = "<|endofprompt|>"
+const (
+	ENDOFTEXT   string = "<|endoftext|>"
+	FIM_PREFIX  string = "<|fim_prefix|>"
+	FIM_MIDDLE  string = "<|fim_middle|>"
+	FIM_SUFFIX  string = "<|fim_suffix|>"
+	ENDOFPROMPT string = "<|endofprompt|>"
+)
 
 var MODEL_TO_ENCODING = map[string]string{
 	// chat
-	"gpt-4":         "cl100k_base",
-	"gpt-3.5-turbo": "cl100k_base",
+	"gpt-4":      "cl100k_base",
+	"gpt-4-0314": "cl100k_base",
+	"gpt-4-0613": "cl100k_base",
+
+	"gpt-3.5-turbo":          "cl100k_base",
+	"gpt-3.5-turbo-0301":     "cl100k_base",
+	"gpt-3.5-turbo-0613":     "cl100k_base",
+	"gpt-3.5-turbo-16k":      "cl100k_base",
+	"gpt-3.5-turbo-16k-0613": "cl100k_base",
 	// text
 	"text-davinci-003": "p50k_base",
 	"text-davinci-002": "p50k_base",
