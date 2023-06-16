@@ -8,7 +8,7 @@ import (
 
 func TestEncoding(t *testing.T) {
 	ass := assert.New(t)
-	enc, err := GetEncoding("cl100k_base")
+	enc, err := EncodingForModel("gpt-3.5-turbo-16k")
 	ass.Nil(err, "Encoding  init should not be nil")
 	tokens := enc.Encode("hello world!你好，世界！", []string{"all"}, []string{"all"})
 	// these tokens are converted from the original python code
@@ -33,7 +33,8 @@ func TestEncoding(t *testing.T) {
 
 func TestDecoding(t *testing.T) {
 	ass := assert.New(t)
-	enc, err := GetEncoding("cl100k_base")
+	// enc, err := GetEncoding("cl100k_base")
+	enc, err := GetEncoding(MODEL_CL100K_BASE)
 	ass.Nil(err, "Encoding  init should not be nil")
 	sourceTokens := []int{15339, 1917, 0, 57668, 53901, 3922, 3574, 244, 98220, 6447}
 	txt := enc.Decode(sourceTokens)
