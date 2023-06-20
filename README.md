@@ -196,7 +196,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 
 
 # Test
-> you can run text in [test](./test) folder
+> you can run test in [test](./test) folder
 
 # compare with original [tiktoken](https://github.com/openai/tiktoken)
 
