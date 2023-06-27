@@ -8,6 +8,12 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
+var bpeLoader BpeLoader = NewDefaultBpeLoader()
+
+func SetBpeLoader(loader BpeLoader) {
+	bpeLoader = loader
+}
+
 func GetEncoding(encodingName string) (*Tiktoken, error) {
 	enc, err := getEncoding(encodingName)
 	if err != nil {

@@ -8,14 +8,10 @@ Tiktoken is a fast BPE tokeniser for use with OpenAI's models.
 This is a port of the original [tiktoken](https://github.com/openai/tiktoken).  
 
 # Usage
-
 ## Install
 
 ```bash
 go get github.com/pkoukk/tiktoken-go
-# default tiktoken need download token dictionary from openai website, 
-# if you want use this lib offline, use embed branch instead
-go get github.com/pkoukk/tiktoken-go@embed
 ```
 ## Cache
 Tiktoken-go has the same cache mechanism as the original Tiktoken library.  
@@ -26,9 +22,22 @@ Once this variable is set, tiktoken-go will use this directory to cache the toke
 
 If you don't set this environment variable, tiktoken-go will download the dictionary each time you initialize an encoding for the first time.  
 
-## Example
+## Alternative BPE loaders
+If you don't want to use cache or download the dictionary each time, you can use alternative BPE loader.
 
-### get token by encoding
+Just call `tiktoken.SetBpeLoader` before calling `tiktoken.GetEncoding` or `tiktoken.EncodingForModel`.
+
+`BpeLoader` is an interface, you can implement your own BPE loader by implementing this interface.
+
+### Offline BPE loader
+The offline BPE loader loads the BPE dictionary from embed files, it helps if you don't want to download the dictionary at runtime.  
+
+Due to the size of the BPE dictionary, this loader is in other project.
+
+Include if you require this loader: [tiktoken_loader](https://github.com/pkoukk/tiktoken-go-loader)
+
+## Examples
+### Get Token By Encoding
 
 ```go
 package main
@@ -42,6 +51,8 @@ func main()  {
 	text := "Hello, world!"
 	encoding := "cl100k_base"
 
+	// if you don't want download dictionary at runtime, you can use offline loader
+	// tiktoken.SetBpeLoader(tiktoken_loader.NewOfflineLoader())
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
 		err = fmt.Errorf("getEncoding: %v", err)
@@ -58,7 +69,7 @@ func main()  {
 }
 ```
 
-### get token by Model
+### Get Token By Model
 
 ```go
 package main
@@ -87,7 +98,8 @@ func main()  {
 	fmt.Println(len(token))
 }
 ```
-### counting tokens for chat API calls
+
+### Counting Tokens For Chat API Calls
 Below is an example function for counting tokens for messages passed to gpt-3.5-turbo-0301 or gpt-4-0314.
 
 The following code was written by @nasa1024 based on [openai-cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)     examples.
@@ -159,7 +171,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 ```
 
 
-# available encodings
+# Available Encodings
  | Encoding name           | OpenAI models                                        |
  | ----------------------- | ---------------------------------------------------- |
  | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
@@ -168,13 +180,13 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 
 
 
-# available models
+# Available Models
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
-| gpt-4                        | cl100k_base   |
 | gpt-4-*                      | cl100k_base   |
-| gpt-3.5-turbo                | cl100k_base   |
 | gpt-3.5-turbo-*              | cl100k_base   |
+| gpt-4                        | cl100k_base   |
+| gpt-3.5-turbo                | cl100k_base   |
 | text-davinci-003             | p50k_base     |
 | text-davinci-002             | p50k_base     |
 | text-davinci-001             | r50k_base     |
@@ -211,7 +223,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # Test
 > you can run test in [test](./test) folder
 
-# compare with original [tiktoken](https://github.com/openai/tiktoken)
+## compare with original [tiktoken](https://github.com/openai/tiktoken)
 
 ## get token by encoding
 [result](./doc/test_result.md#encoding-test-result)

@@ -7,21 +7,36 @@ tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).
 
 ## 安装
 
-
 ```bash
 go get github.com/pkoukk/tiktoken-go
-# 默认的tiktoken需要从openai下载token字典，如果想要离线使用，可以使用以下分支
-go get github.com/pkoukk/tiktoken-go@embed
 ```
 ## 缓存
 Tiktoken-go 和原始的 Tiktoken 库一样，具有相同的缓存机制。  
+
 您可以使用环境变量 TIKTOKEN_CACHE_DIR 来设置缓存目录。  
+
 一旦设置了该变量，tiktoken-go 将使用该目录来缓存令牌字典。  
+
 如果您未设置此环境变量，则 tiktoken-go 将在每次首次初始化编码时下载字典。  
+
+
+## 替代 BPE 加载器
+默认情况下，tiktoken-go 会在运行时下载字典，如果您不想使用缓存或每次下载字典，您可以使用替代 BPE 加载器。
+
+只需在调用 `tiktoken.GetEncoding` 或 `tiktoken.EncodingForModel` 之前调用 `tiktoken.SetBpeLoader`。
+
+`BpeLoader` 是一个接口，您可以通过实现此接口来实现自己的 BPE 加载器。
+
+### 离线 BPE 加载器
+离线 BPE 加载器从嵌入文件加载 BPE 字典。
+
+由于 BPE 字典的文件较大，不适合包含在本项目中，故此加载器在其他项目中。
+
+如果需要使用，请引用：[tiktoken_loader](https://github.com/pkoukk/tiktoken-go-loader)
 
 ## 例子
 
-### get token by encoding
+### Get Token By Encoding
 
 ```go
 package main
@@ -35,6 +50,8 @@ func main()  {
 	text := "Hello, world!"
 	encoding := "cl100k_base"
 
+	// 如果你不想在运行时下载字典，你可以使用离线加载器
+	// tiktoken.SetBpeLoader(tiktoken_loader.NewOfflineLoader())
 	tke, err := tiktoken.GetEncoding(encoding)
 	if err != nil {
 		err = fmt.Errorf("getEncoding: %v", err)
