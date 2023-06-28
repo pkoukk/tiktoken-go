@@ -137,7 +137,8 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 		model == "gpt-4-0314" ||
 		model == "gpt-4-32k-0314" ||
 		model == "gpt-4-0613" ||
-		model == "gpt-4-32k-0613" {
+		model == "gpt-4-32k-0613" ||
+		model == "gpt-3.5-turbo-16k" {
 		tokensPerMessage = 3
 		tokensPerName = -1
 	} else if model == "gpt-3.5-turbo-0301" {
