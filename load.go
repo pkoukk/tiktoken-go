@@ -14,6 +14,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type BpeLoader interface {
+	LoadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error)
+}
+
 func readFile(blobpath string) ([]byte, error) {
 	if !strings.HasPrefix(blobpath, "http://") && !strings.HasPrefix(blobpath, "https://") {
 		file, err := os.Open(blobpath)
@@ -90,4 +94,14 @@ func loadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
 		bpeRanks[string(token)] = rank
 	}
 	return bpeRanks, nil
+}
+
+type defaultBpeLoader struct{}
+
+func (l *defaultBpeLoader) LoadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
+	return loadTiktokenBpe(tiktokenBpeFile)
+}
+
+func NewDefaultBpeLoader() BpeLoader {
+	return &defaultBpeLoader{}
 }

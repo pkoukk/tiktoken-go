@@ -8,6 +8,12 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
+var bpeLoader BpeLoader = NewDefaultBpeLoader()
+
+func SetBpeLoader(loader BpeLoader) {
+	bpeLoader = loader
+}
+
 func GetEncoding(encodingName string) (*Tiktoken, error) {
 	enc, err := getEncoding(encodingName)
 	if err != nil {
@@ -78,6 +84,10 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 
 	tokens, _ := t.bpe.encodeNative(text, allowedSpecialSet)
 	return tokens
+}
+
+func (t *Tiktoken) EncodeOrdinary(text string) []int {
+	return (t.bpe.encodeOrdinaryNative(text))
 }
 
 func (t *Tiktoken) Decode(tokens []int) string {
