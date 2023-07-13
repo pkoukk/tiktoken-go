@@ -2,7 +2,7 @@ package tiktoken
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -11,7 +11,7 @@ const TEST_FILE = "test/test.txt"
 
 func ReadTestFile() ([]byte, error) {
 	// open and read TEST_FILE
-	return ioutil.ReadFile(TEST_FILE)
+	return os.ReadFile(TEST_FILE)
 }
 
 func BenchmarkEncoding(b *testing.B) {
