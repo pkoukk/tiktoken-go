@@ -67,17 +67,11 @@ var MODEL_PREFIX_TO_ENCODING = map[string]string{
 }
 
 var encodingMap map[string]*Encoding
-
-var onceMaps map[string]*sync.Once
+var l *sync.Mutex
 
 func init() {
 	encodingMap = make(map[string]*Encoding)
-	onceMaps = make(map[string]*sync.Once)
-	for _, encodingName := range MODEL_TO_ENCODING {
-		if _, ok := onceMaps[encodingName]; !ok {
-			onceMaps[encodingName] = &sync.Once{}
-		}
-	}
+	l = &sync.Mutex{}
 }
 
 type Encoding struct {
@@ -89,6 +83,8 @@ type Encoding struct {
 }
 
 func getEncoding(encodingName string) (*Encoding, error) {
+	l.Lock()
+	defer l.Unlock()
 	if encoding, ok := encodingMap[encodingName]; ok {
 		return encoding, nil
 	}
@@ -96,7 +92,7 @@ func getEncoding(encodingName string) (*Encoding, error) {
 	if err != nil {
 		return nil, err
 	}
-	onceMaps[encodingName].Do(func() { encodingMap[encodingName] = initEncoding })
+	encodingMap[encodingName] = initEncoding
 	return encodingMap[encodingName], nil
 }
 
