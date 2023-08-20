@@ -1,8 +1,11 @@
 package tiktoken
 
 import (
+	"bytes"
 	"crypto/sha1"
+	_ "embed"
 	"encoding/base64"
+	"encoding/gob"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -12,6 +15,27 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+)
+
+var (
+	//go:embed cl100k.gob
+	cl100k []byte
+	//go:embed p50k.gob
+	p50k          []byte
+	embedded_maps = func() (s struct {
+		Cl100k_base map[string]int
+		P50k_base   map[string]int
+	}) {
+		dec := gob.NewDecoder(bytes.NewReader(cl100k))
+		if err := dec.Decode(&s.Cl100k_base); err != nil {
+			panic(err)
+		}
+		dec = gob.NewDecoder(bytes.NewReader(p50k))
+		if err := dec.Decode(&s.P50k_base); err != nil {
+			panic(err)
+		}
+		return
+	}()
 )
 
 type BpeLoader interface {
@@ -99,7 +123,14 @@ func loadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
 type defaultBpeLoader struct{}
 
 func (l *defaultBpeLoader) LoadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
-	return loadTiktokenBpe(tiktokenBpeFile)
+	switch tiktokenBpeFile {
+	case "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken":
+		return embedded_maps.Cl100k_base, nil
+	case "https://openaipublic.blob.core.windows.net/encodings/p50k_base.tiktoken":
+		return embedded_maps.P50k_base, nil
+	default:
+		return loadTiktokenBpe(tiktokenBpeFile)
+	}
 }
 
 func NewDefaultBpeLoader() BpeLoader {
