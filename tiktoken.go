@@ -27,11 +27,7 @@ func GetEncoding(encodingName string) (*Tiktoken, error) {
 	for k := range enc.SpecialTokens {
 		specialTokensSet[k] = true
 	}
-	return &Tiktoken{
-		bpe:              pbe,
-		pbeEncoding:      enc,
-		specialTokensSet: specialTokensSet,
-	}, nil
+	return NewTiktoken(pbe, enc, specialTokensSet), nil
 }
 
 func EncodingForModel(modelName string) (*Tiktoken, error) {
@@ -120,4 +116,13 @@ func difference(setA, setB map[string]any) map[string]any {
 		}
 	}
 	return result
+}
+
+// NewTiktoken can be used to create a *Tiktoken with custom parameters.
+func NewTiktoken(bpe *CoreBPE, encoding *Encoding, specialTokensSet map[string]any) *Tiktoken {
+	return &Tiktoken{
+		bpe:              bpe,
+		pbeEncoding:      encoding,
+		specialTokensSet: specialTokensSet,
+	}
 }
