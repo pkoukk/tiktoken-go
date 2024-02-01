@@ -45,6 +45,8 @@ var MODEL_TO_ENCODING = map[string]string{
 	"code-davinci-edit-001": MODEL_P50K_EDIT,
 	// embeddings
 	"text-embedding-ada-002": MODEL_CL100K_BASE,
+	"text-embedding-3-large": MODEL_CL100K_BASE,
+	"text-embedding-3-small": MODEL_CL100K_BASE,
 	// old embeddings
 	"text-similarity-davinci-001":  MODEL_R50K_BASE,
 	"text-similarity-curie-001":    MODEL_R50K_BASE,
