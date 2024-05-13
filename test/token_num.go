@@ -14,13 +14,13 @@ import (
 func main() {
 	textList, modelList, encodingList := ReadTestFile()
 	testTokenByModel(textList, modelList)
-	fmt.Println("=========================================")
+	fmt.Println("=====================================")
 	testTokenByEncoding(textList, encodingList)
 }
 
 // read all columns from a file
 func ReadTestFile() (textList []string, modelList []string, encodingList []string) {
-	file, err := os.Open("test/test.txt")
+	file, err := os.Open("test.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

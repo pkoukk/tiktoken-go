@@ -47,7 +47,7 @@ def test_token_by_model(text_list, model_list):
     for text in text_list:
         for model in model_list:
             num_tokens = get_token_by_model(text, model)
-            print('text: {}, model: {}, token: {}'.format(text, model, num_tokens))
+            print('text: {}, model: {}, token: {} '.format(text, model, num_tokens))
 
 def test_token_by_encoding(text_list, encoding_list):
     """
@@ -59,10 +59,10 @@ def test_token_by_encoding(text_list, encoding_list):
     for text in text_list:
         for encoding in encoding_list:
             num_tokens = get_token_by_encoding(text, encoding)
-            print('text: {}, encoding: {}, token: {}'.format(text, encoding, num_tokens))
+            print('text: {}, encoding: {}, token: {} '.format(text, encoding, num_tokens))
 
 if __name__ == '__main__':
-    text_list, model_list, encoding_list = read_data_from_file('test/test.txt')
+    text_list, model_list, encoding_list = read_data_from_file('test.txt')
     test_token_by_model(text_list, model_list)
     print("=====================================")
     test_token_by_encoding(text_list, encoding_list)

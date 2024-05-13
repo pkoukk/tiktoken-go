@@ -1,28 +1,33 @@
 # tiktoken-go
+
 [简体中文](./README_zh-hans.md)
 
-OpenAI's tiktoken in Go. 
+OpenAI's tiktoken in Go.
 
 Tiktoken is a fast BPE tokeniser for use with OpenAI's models.
 
-This is a port of the original [tiktoken](https://github.com/openai/tiktoken).  
+This is a port of the original [tiktoken](https://github.com/openai/tiktoken).
 
 # Usage
+
 ## Install
 
 ```bash
 go get github.com/pkoukk/tiktoken-go
 ```
+
 ## Cache
-Tiktoken-go has the same cache mechanism as the original Tiktoken library.  
 
-You can set the cache directory by using the environment variable TIKTOKEN_CACHE_DIR.   
+Tiktoken-go has the same cache mechanism as the original Tiktoken library.
 
-Once this variable is set, tiktoken-go will use this directory to cache the token dictionary.   
+You can set the cache directory by using the environment variable TIKTOKEN_CACHE_DIR.
 
-If you don't set this environment variable, tiktoken-go will download the dictionary each time you initialize an encoding for the first time.  
+Once this variable is set, tiktoken-go will use this directory to cache the token dictionary.
+
+If you don't set this environment variable, tiktoken-go will download the dictionary each time you initialize an encoding for the first time.
 
 ## Alternative BPE loaders
+
 If you don't want to use cache or download the dictionary each time, you can use alternative BPE loader.
 
 Just call `tiktoken.SetBpeLoader` before calling `tiktoken.GetEncoding` or `tiktoken.EncodingForModel`.
@@ -30,13 +35,15 @@ Just call `tiktoken.SetBpeLoader` before calling `tiktoken.GetEncoding` or `tikt
 `BpeLoader` is an interface, you can implement your own BPE loader by implementing this interface.
 
 ### Offline BPE loader
-The offline BPE loader loads the BPE dictionary from embed files, it helps if you don't want to download the dictionary at runtime.  
+
+The offline BPE loader loads the BPE dictionary from embed files, it helps if you don't want to download the dictionary at runtime.
 
 Due to the size of the BPE dictionary, this loader is in other project.
 
 Include if you require this loader: [tiktoken_loader](https://github.com/pkoukk/tiktoken-go-loader)
 
 ## Examples
+
 ### Get Token By Encoding
 
 ```go
@@ -100,16 +107,16 @@ func main()  {
 ```
 
 ### Counting Tokens For Chat API Calls
+
 Below is an example function for counting tokens for messages passed to gpt-3.5-turbo or gpt-4.
 
-The following code was written based on [openai-cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)  examples at `Wednesday, 28 June 2023`.
+The following code was written based on [openai-cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb) examples at `Wednesday, 28 June 2023`.
 
 Please note that the token calculation method for the message may change at any time, so this code may not necessarily be applicable in the future.
 
 If you need accurate calculation, please refer to the official documentation.
 
 If you find that this code is no longer applicable, please feel free to submit a PR or Issue.
-
 
 ```go
 package main
@@ -172,21 +179,23 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 
 ```
 
-
 # Available Encodings
- | Encoding name           | OpenAI models                                        |
- | ----------------------- | ---------------------------------------------------- |
- | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
- | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
- | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
 
-
+| Encoding name           | OpenAI models                                        |
+| ----------------------- | ---------------------------------------------------- |
+| `o200k_base`            | `gpt-4o`                                             |
+| `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
+| `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
+| `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
 
 # Available Models
+
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
-| gpt-4-*                      | cl100k_base   |
-| gpt-3.5-turbo-*              | cl100k_base   |
+| gpt-4o                       | o200k_base    |
+| gpt-4o-\*                    | o200k_base    |
+| gpt-4-\*                     | cl100k_base   |
+| gpt-3.5-turbo-\*             | cl100k_base   |
 | gpt-4                        | cl100k_base   |
 | gpt-3.5-turbo                | cl100k_base   |
 | text-davinci-003             | p50k_base     |
@@ -220,37 +229,39 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 | code-search-ada-code-001     | r50k_base     |
 | gpt2                         | gpt2          |
 
-
-
 # Test
+
 > you can run test in [test](./test) folder
 
 ## compare with original [tiktoken](https://github.com/openai/tiktoken)
 
 ## get token by encoding
+
 [result](./doc/test_result.md#encoding-test-result)
 
-## get token by model  
+## get token by model
+
 [result](./doc/test_result.md#model-test-result)
 
-
-
 # Benchmark
+
 > you can run benchmark in [test](./test) folder
 
 ## Benchmark result
+
 | name        | time/op | os         | cpu      | text                             | times  |
 | ----------- | ------- | ---------- | -------- | -------------------------------- | ------ |
 | tiktoken-go | 8795ns  | macOS 13.2 | Apple M1 | [UDHR](https://unicode.org/udhr) | 100000 |
 | tiktoken    | 8838ns  | macOS 13.2 | Apple M1 | [UDHR](https://unicode.org/udhr) | 100000 |
 
-It looks like the performance is almost the same.   
+It looks like the performance is almost the same.
 
 Maybe the difference is due to the difference in the performance of the machine.
 
-Or maybe my benchmark method is not appropriate.  
+Or maybe my benchmark method is not appropriate.
 
 If you have better benchmark method or if you want add your benchmark result, please feel free to submit a PR.
 
 # License
+
 [MIT](./LICENSE)

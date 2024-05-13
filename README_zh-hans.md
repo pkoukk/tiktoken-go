@@ -1,7 +1,8 @@
 # tiktoken-go
+
 Go 语言版本的 OpenAI 的 tiktoken。  
 帮你把文本转换成 OpenAI 的模型可以识别的 token。  
-tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).  
+tiktoken 的原项目地址[tiktoken](https://github.com/openai/tiktoken).
 
 # 用法
 
@@ -10,17 +11,19 @@ tiktoken的原项目地址[tiktoken](https://github.com/openai/tiktoken).
 ```bash
 go get github.com/pkoukk/tiktoken-go
 ```
+
 ## 缓存
-Tiktoken-go 和原始的 Tiktoken 库一样，具有相同的缓存机制。  
 
-您可以使用环境变量 TIKTOKEN_CACHE_DIR 来设置缓存目录。  
+Tiktoken-go 和原始的 Tiktoken 库一样，具有相同的缓存机制。
 
-一旦设置了该变量，tiktoken-go 将使用该目录来缓存令牌字典。  
+您可以使用环境变量 TIKTOKEN_CACHE_DIR 来设置缓存目录。
 
-如果您未设置此环境变量，则 tiktoken-go 将在每次首次初始化编码时下载字典。  
+一旦设置了该变量，tiktoken-go 将使用该目录来缓存令牌字典。
 
+如果您未设置此环境变量，则 tiktoken-go 将在每次首次初始化编码时下载字典。
 
 ## 替代 BPE 加载器
+
 默认情况下，tiktoken-go 会在运行时下载字典，如果您不想使用缓存或每次下载字典，您可以使用替代 BPE 加载器。
 
 只需在调用 `tiktoken.GetEncoding` 或 `tiktoken.EncodingForModel` 之前调用 `tiktoken.SetBpeLoader`。
@@ -28,6 +31,7 @@ Tiktoken-go 和原始的 Tiktoken 库一样，具有相同的缓存机制。
 `BpeLoader` 是一个接口，您可以通过实现此接口来实现自己的 BPE 加载器。
 
 ### 离线 BPE 加载器
+
 离线 BPE 加载器从嵌入文件加载 BPE 字典。
 
 由于 BPE 字典的文件较大，不适合包含在本项目中，故此加载器在其他项目中。
@@ -98,14 +102,15 @@ func main()  {
 }
 ```
 
-### 计算chat API消息当中的token消耗
+### 计算 chat API 消息当中的 token 消耗
+
 这段代码根据[官方示例](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)编写
 
 编写时间： `2023-06-28`
 
-请注意，消息的token计算方式可能随时会发生改变，以下代码并不一定在将来适用，如果您需要精确的计算，请关注官方文档。
+请注意，消息的 token 计算方式可能随时会发生改变，以下代码并不一定在将来适用，如果您需要精确的计算，请关注官方文档。
 
-如果您发现这段代码不再适用，欢迎您提PR或Issue。
+如果您发现这段代码不再适用，欢迎您提 PR 或 Issue。
 
 ```go
 package main
@@ -167,20 +172,24 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 ```
 
 # available encodings
- | Encoding name           | OpenAI models                                        |
- | ----------------------- | ---------------------------------------------------- |
- | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
- | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
- | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
 
+| Encoding name           | OpenAI models                                        |
+| ----------------------- | ---------------------------------------------------- |
+| `o200k_base`            | `gpt-4o`                                             |
+| `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
+| `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
+| `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
 
 # available models
+
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
+| gpt-4o                       | o200k_base    |
+| gpt-4o-\*                    | o200k_base    |
 | gpt-4                        | cl100k_base   |
-| gpt-4-*                      | cl100k_base   |
+| gpt-4-\*                     | cl100k_base   |
 | gpt-3.5-turbo                | cl100k_base   |
-| gpt-3.5-turbo-*              | cl100k_base   |
+| gpt-3.5-turbo-\*             | cl100k_base   |
 | text-davinci-003             | p50k_base     |
 | text-davinci-002             | p50k_base     |
 | text-davinci-001             | r50k_base     |
@@ -215,25 +224,30 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # 与官方 [tiktoken](https://github.com/openai/tiktoken) 的对比
 
 ## get token by encoding
+
 [测试结果](./doc/test_result.md#encoding-test-result)
 
-## get token by model  
+## get token by model
+
 [测试结果](./doc/test_result.md#model-test-result)
 
 # Benchmark
-> 你可以使用 [test](./test) 目录下的文件执行基准测试。 
+
+> 你可以使用 [test](./test) 目录下的文件执行基准测试。
 
 ## Benchmark result
+
 | name        | time/op | os         | cpu      | text                             | times  |
 | ----------- | ------- | ---------- | -------- | -------------------------------- | ------ |
 | tiktoken-go | 8795ns  | macOS 13.2 | Apple M1 | [UDHR](https://unicode.org/udhr) | 100000 |
 | tiktoken    | 8838ns  | macOS 13.2 | Apple M1 | [UDHR](https://unicode.org/udhr) | 100000 |
 
-看上去tiktoken-go的性能基本与原tiktoken一致。  
+看上去 tiktoken-go 的性能基本与原 tiktoken 一致。
 
 也许在不同的机器上的测试结果会有所不同。也可能是我的测试方法并不恰当。
 
-如果你有更好的测试方法，或者说你想添加在你机器上的测试结果，欢迎提PR。
+如果你有更好的测试方法，或者说你想添加在你机器上的测试结果，欢迎提 PR。
 
 # License
+
 [MIT](./LICENSE)
