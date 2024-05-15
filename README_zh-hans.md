@@ -235,5 +235,14 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 
 如果你有更好的测试方法，或者说你想添加在你机器上的测试结果，欢迎提PR。
 
+新的 `o200k_base` 编码, 看起来比 `cl100k_base` 慢. 在以下硬件上，tiktoken-go 比 tiktoken 略慢。
+
+| name        | encoding | time/op | os         | cpu      | text                             | times  |
+| ----------- | ------- | ------- | ---------- | -------- | -------------------------------- | ------ |
+| tiktoken-go | o200k_base | 108522 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | o200k_base | 70198 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken-go | cl100k_base | 94502 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | cl100k_base | 54642 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+
 # License
 [MIT](./LICENSE)

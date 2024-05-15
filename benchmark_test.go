@@ -20,7 +20,7 @@ func BenchmarkEncoding(b *testing.B) {
 		panic(err)
 	}
 
-	tkm, err := EncodingForModel("gpt-4")
+	tkm, err := EncodingForModel("gpt-4o")
 	if err != nil {
 		panic(err)
 	}
