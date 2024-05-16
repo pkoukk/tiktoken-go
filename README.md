@@ -1,3 +1,6 @@
+# Why fork
+Due to the original repository being inactive for an extended period, we have created a fork here. This version includes updates tailored for the latest versions of `gpt-o4` and `o200k` encoder.
+
 # tiktoken-go
 [简体中文](./README_zh-hans.md)
 

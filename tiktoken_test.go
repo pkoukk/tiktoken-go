@@ -40,3 +40,12 @@ func TestDecoding(t *testing.T) {
 	txt := enc.Decode(sourceTokens)
 	ass.Equal("hello world!你好，世界！", txt, "Decoding should be equal")
 }
+
+func TestO200Decoding(t *testing.T) {
+	ass := assert.New(t)
+	enc, err := GetEncoding(MODEL_O200K_BASE)
+	ass.Nil(err, "Encoding init should not be nil")
+	sourceTokens := []int{83, 8251, 2488, 382, 2212, 30}
+	txt := enc.Decode(sourceTokens)
+	ass.Equal("tiktoken is great?", txt, "Decoding should be equal")
+}
