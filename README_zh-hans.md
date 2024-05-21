@@ -170,7 +170,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
  | Encoding name           | OpenAI models                                        |
  | ----------------------- | ---------------------------------------------------- |
  | `o200k_base`            | `gpt-4o`                                             |
- | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`   |
+ | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`, 	`text-embedding-3-small`, `text-embedding-3-large`   |
  | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
  | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
 
@@ -202,6 +202,8 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 | text-davinci-edit-001        | p50k_edit     |
 | code-davinci-edit-001        | p50k_edit     |
 | text-embedding-ada-002       | cl100k_base   |
+| text-embedding-3-small       | cl100k_base   |
+| text-embedding-3-large       | cl100k_base   |
 | text-similarity-davinci-001  | r50k_base     |
 | text-similarity-curie-001    | r50k_base     |
 | text-similarity-babbage-001  | r50k_base     |
