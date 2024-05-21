@@ -169,6 +169,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # available encodings
  | Encoding name           | OpenAI models                                        |
  | ----------------------- | ---------------------------------------------------- |
+ | `o200k_base`            | `gpt-4o`                                             |
  | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`, 	`text-embedding-3-small`, `text-embedding-3-large`   |
  | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
  | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
@@ -177,6 +178,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # available models
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
+| gpt-4o-*                     | o200k_base    |
 | gpt-4                        | cl100k_base   |
 | gpt-4-*                      | cl100k_base   |
 | gpt-3.5-turbo                | cl100k_base   |
@@ -236,6 +238,15 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 也许在不同的机器上的测试结果会有所不同。也可能是我的测试方法并不恰当。
 
 如果你有更好的测试方法，或者说你想添加在你机器上的测试结果，欢迎提PR。
+
+新的 `o200k_base` 编码, 看起来比 `cl100k_base` 慢. 在以下硬件上，tiktoken-go 比 tiktoken 略慢。
+
+| name        | encoding | time/op | os         | cpu      | text                             | times  |
+| ----------- | ------- | ------- | ---------- | -------- | -------------------------------- | ------ |
+| tiktoken-go | o200k_base | 108522 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | o200k_base | 70198 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken-go | cl100k_base | 94502 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | cl100k_base | 54642 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
 
 # License
 [MIT](./LICENSE)

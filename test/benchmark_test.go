@@ -1,32 +1,24 @@
 package main
 
 import (
-	"io"
 	"log"
-	"net/http"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/pkoukk/tiktoken-go"
 )
 
+// go test -benchmem -run=^$ -bench ^BenchmarkEncodingInFullLanguage$ -benchtime=100000x github.com/pkoukk/tiktoken-go/test
+
 func BenchmarkEncodingInFullLanguage(b *testing.B) {
-	// Universal Declaration of Human Rights in all languages
-	url := "https://unicode.org/udhr/assemblies/full_all.txt"
-	response, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer response.Body.Close()
-
-	responseData, err := io.ReadAll(response.Body)
+	data, err := os.ReadFile("/tmp/udhr.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	responseString := string(responseData)
-	lines := strings.Split(responseString, "\n")
-	tkm, err := tiktoken.EncodingForModel("gpt-4")
+	lines := strings.Split(string(data), "\n")
+	tkm, err := tiktoken.EncodingForModel("gpt-4o")
 	lineCount := len(lines)
 	if err != nil {
 		log.Fatal(err)

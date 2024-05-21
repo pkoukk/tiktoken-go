@@ -176,6 +176,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # Available Encodings
  | Encoding name           | OpenAI models                                        |
  | ----------------------- | ---------------------------------------------------- |
+ | `o200k_base`            | `gpt-4o`                                             |
  | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`, `text-embedding-3-small`, `text-embedding-3-large`   |
  | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
  | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
@@ -185,8 +186,10 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # Available Models
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
+| gpt-4o-*                     | o200k_base    |
 | gpt-4-*                      | cl100k_base   |
 | gpt-3.5-turbo-*              | cl100k_base   |
+| gpt-4o                       | o200k_base    |
 | gpt-4                        | cl100k_base   |
 | gpt-3.5-turbo                | cl100k_base   |
 | text-davinci-003             | p50k_base     |
@@ -253,6 +256,15 @@ Maybe the difference is due to the difference in the performance of the machine.
 Or maybe my benchmark method is not appropriate.  
 
 If you have better benchmark method or if you want add your benchmark result, please feel free to submit a PR.
+
+For new `o200k_base` encoding, it seems slower than `cl100k_base`. tiktoken-go is slightly slower than tiktoken on the following benchmark.
+
+| name        | encoding | time/op | os         | cpu      | text                             | times  |
+| ----------- | ------- | ------- | ---------- | -------- | -------------------------------- | ------ |
+| tiktoken-go | o200k_base | 108522 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | o200k_base | 70198 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken-go | cl100k_base | 94502 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
+| tiktoken    | cl100k_base | 54642 ns  | Ubuntu 22.04 | AMD Ryzen 9 5900HS | [UDHR](http://research.ics.aalto.fi/cog/data/udhr/) | 100000 |
 
 # License
 [MIT](./LICENSE)

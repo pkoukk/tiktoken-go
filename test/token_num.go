@@ -74,7 +74,7 @@ func getTokenByEncoding(text string, encoding string) (num_tokens int) {
 func testTokenByModel(textList []string, modelList []string) {
 	for i := 0; i < len(textList); i++ {
 		for j := 0; j < len(modelList); j++ {
-			fmt.Printf("text: %s, model: %s, token: %d \n", textList[i], modelList[j], getTokenByModel(textList[i], modelList[j]))
+			fmt.Printf("text: %s, model: %s, token: %d\n", textList[i], modelList[j], getTokenByModel(textList[i], modelList[j]))
 		}
 	}
 }
@@ -83,7 +83,7 @@ func testTokenByModel(textList []string, modelList []string) {
 func testTokenByEncoding(textList []string, encodingList []string) {
 	for i := 0; i < len(textList); i++ {
 		for j := 0; j < len(encodingList); j++ {
-			fmt.Printf("text: %s, encoding: %s, token: %d \n", textList[i], encodingList[j], getTokenByEncoding(textList[i], encodingList[j]))
+			fmt.Printf("text: %s, encoding: %s, token: %d\n", textList[i], encodingList[j], getTokenByEncoding(textList[i], encodingList[j]))
 		}
 	}
 }
