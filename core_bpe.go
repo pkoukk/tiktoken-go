@@ -74,7 +74,7 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 	regex := bp.tlRegex
 	ret := []int{}
 	lastPieceTokenLen := 0
-	textRunes := []rune(text)
+	textRunes := stringToRunes(text)
 
 	start := 0
 	for {
@@ -86,7 +86,7 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 			nextSpecial = findRegex2StringIndex(temp, specialRegex)
 			if nextSpecial != nil {
 				token := cutRunes(textRunes, startFind+nextSpecial[0], startFind+nextSpecial[1])
-				if _, ok := allowedSpecial[token]; ok {
+				if _, ok := allowedSpecial[runesToString(token)]; ok {
 					break
 				}
 				startFind += nextSpecial[1]
@@ -103,19 +103,19 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 		// Okay, here we go, compare this logic to _encode_ordinary_native
 		for _, mat := range findRegex2AllStringMatchIndex(cutRunes(textRunes, start, end), regex) {
 			piece := cutRunes(textRunes, start+mat[0], start+mat[1])
-			if token, ok := bp.encoder[piece]; ok {
+			if token, ok := bp.encoder[runesToString(piece)]; ok {
 				lastPieceTokenLen = 1
 				ret = append(ret, token)
 				continue
 			}
-			tokens := bytePairEncode([]byte(piece), bp.encoder)
+			tokens := bytePairEncode(piece, bp.encoder)
 			lastPieceTokenLen = len(tokens)
 			ret = append(ret, tokens...)
 		}
 
 		if nextSpecial != nil {
 			temp := cutRunes(textRunes, start+nextSpecial[0], start+nextSpecial[1])
-			token := bp.specialTokensEncoder[temp]
+			token := bp.specialTokensEncoder[runesToString(temp)]
 			ret = append(ret, token)
 			start = start + nextSpecial[1]
 			lastPieceTokenLen = 0
@@ -129,14 +129,14 @@ func (bp *CoreBPE) encodeNative(text string, allowedSpecial map[string]any) ([]i
 
 func (bp *CoreBPE) encodeOrdinaryNative(text string) []int {
 	ret := []int{}
-	textRunes := []rune(text)
-	for _, mat := range findRegex2AllStringMatchIndex(text, bp.tlRegex) {
+	textRunes := stringToRunes(text)
+	for _, mat := range findRegex2AllStringMatchIndex(textRunes, bp.tlRegex) {
 		piece := cutRunes(textRunes, mat[0], mat[1])
-		if token, ok := bp.encoder[piece]; ok {
+		if token, ok := bp.encoder[runesToString(piece)]; ok {
 			ret = append(ret, token)
 			continue
 		}
-		tokens := bytePairEncode([]byte(piece), bp.encoder)
+		tokens := bytePairEncode(piece, bp.encoder)
 		ret = append(ret, tokens...)
 	}
 	return ret
@@ -156,8 +156,8 @@ func (bpe *CoreBPE) decodeNative(tokens []int) []byte {
 	return ret
 }
 
-func findRegex2StringIndex(text string, reg *regexp2.Regexp) []int {
-	m, _ := reg.FindStringMatch(text)
+func findRegex2StringIndex(text []rune, reg *regexp2.Regexp) []int {
+	m, _ := reg.FindRunesMatch(text)
 	if m == nil {
 		return nil
 	}
@@ -167,9 +167,9 @@ func findRegex2StringIndex(text string, reg *regexp2.Regexp) []int {
 	return result
 }
 
-func findRegex2AllStringMatchIndex(text string, reg *regexp2.Regexp) [][]int {
+func findRegex2AllStringMatchIndex(text []rune, reg *regexp2.Regexp) [][]int {
 	var matches [][]int
-	m, _ := reg.FindStringMatch(text)
+	m, _ := reg.FindRunesMatch(text)
 	for m != nil {
 		result := make([]int, 2)
 		result[0] = m.Index
@@ -180,12 +180,12 @@ func findRegex2AllStringMatchIndex(text string, reg *regexp2.Regexp) [][]int {
 	return matches
 }
 
-func cutRunes(runes []rune, start, end int) string {
+func cutRunes(runes []rune, start, end int) []rune {
 	if start < 0 {
 		start = 0
 	}
 	if end > len(runes) {
 		end = len(runes)
 	}
-	return string(runes[start:end])
+	return runes[start:end]
 }

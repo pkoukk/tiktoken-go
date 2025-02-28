@@ -21,8 +21,8 @@ func TestRegex2Func(t *testing.T) {
 	}
 
 	for _, word := range words {
-		ass.ElementsMatch(re.FindStringIndex(word), findRegex2StringIndex(word, re2))
-		ass.ElementsMatch(re.FindAllStringSubmatchIndex(word, -1), findRegex2AllStringMatchIndex(word, re2))
-		ass.Equal(re.FindString(word), findRegex2StringMatch(word, re2))
+		ass.ElementsMatch(re.FindStringIndex(word), findRegex2StringIndex(stringToRunes(word), re2))
+		ass.ElementsMatch(re.FindAllStringSubmatchIndex(word, -1), findRegex2AllStringMatchIndex(stringToRunes(word), re2))
+		ass.Equal(re.FindString(word), findRegex2StringMatch(stringToRunes(word), re2))
 	}
 }

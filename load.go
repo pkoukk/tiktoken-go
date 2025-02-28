@@ -78,7 +78,7 @@ func loadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
 	}
 
 	bpeRanks := make(map[string]int)
-	for _, line := range strings.Split(string(contents), "\n") {
+	for _, line := range strings.Split(bytesToString(contents), "\n") {
 		if line == "" {
 			continue
 		}
@@ -91,7 +91,7 @@ func loadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
 		if err != nil {
 			return nil, err
 		}
-		bpeRanks[string(token)] = rank
+		bpeRanks[bytesToString(token)] = rank
 	}
 	return bpeRanks, nil
 }

@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end int) T) []T {
+func bytePairMerge[T any](piece []rune, ranks map[string]int, f func(start, end int) T) []T {
 	parts := make([][2]int, len(piece)+1)
 	for i := 0; i < len(parts); i++ {
 		parts[i][0], parts[i][1] = i, math.MaxInt // use max int as sentinel
@@ -13,7 +13,7 @@ func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end 
 	getRank := func(startIdx, skip int) int {
 		if startIdx+skip+2 < len(parts) {
 			b := piece[parts[startIdx][0]:parts[startIdx+skip+2][0]]
-			rank, ok := ranks[string(b)]
+			rank, ok := ranks[runesToString(b)]
 			if ok {
 				return rank
 			}
@@ -64,12 +64,12 @@ func bytePairMerge[T any](piece []byte, ranks map[string]int, f func(start, end 
 	return out
 }
 
-func bytePairEncode(piece []byte, ranks map[string]int) []int {
+func bytePairEncode(piece []rune, ranks map[string]int) []int {
 	if len(piece) == 1 {
-		v := ranks[string(piece)]
+		v := ranks[runesToString(piece)]
 		return []int{v}
 	}
 	return bytePairMerge(piece, ranks, func(start, end int) int {
-		return ranks[string(piece[start:end])]
+		return ranks[runesToString(piece[start:end])]
 	})
 }

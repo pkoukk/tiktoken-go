@@ -24,6 +24,7 @@ func BenchmarkEncodingInFullLanguage(b *testing.B) {
 		log.Fatal(err)
 	}
 	b.ResetTimer()
+	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
 		tkm.EncodeOrdinary(lines[n%lineCount])
 	}

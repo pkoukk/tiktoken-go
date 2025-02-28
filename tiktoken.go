@@ -72,7 +72,7 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 
 	if len(disallowedSpecialSet) > 0 {
 		specialRegex := t.SpecialTokenRegex(disallowedSpecialSet)
-		m := findRegex2StringMatch(text, specialRegex)
+		m := findRegex2StringMatch(stringToRunes(text), specialRegex)
 		if m != "" {
 			panic(fmt.Sprintf("text contains disallowed special token %s", m))
 		}
@@ -83,7 +83,7 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 }
 
 func (t *Tiktoken) EncodeOrdinary(text string) []int {
-	return (t.bpe.encodeOrdinaryNative(text))
+	return t.bpe.encodeOrdinaryNative(text)
 }
 
 func (t *Tiktoken) Decode(tokens []int) string {
@@ -99,8 +99,8 @@ func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regex
 	return specialRegex
 }
 
-func findRegex2StringMatch(text string, reg *regexp2.Regexp) string {
-	m, _ := reg.FindStringMatch(text)
+func findRegex2StringMatch(text []rune, reg *regexp2.Regexp) string {
+	m, _ := reg.FindRunesMatch(text)
 	if m == nil {
 		return ""
 	}
