@@ -1,17 +1,18 @@
 package tiktoken
 
 import (
-	"crypto/sha1"
-	"encoding/base64"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"path/filepath"
-	"strconv"
-	"strings"
+    "crypto/sha1"
+    "crypto/sha256"
+    "encoding/base64"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "os"
+    "path/filepath"
+    "strconv"
+    "strings"
 
-	"github.com/google/uuid"
+    "github.com/google/uuid"
 )
 
 type BpeLoader interface {
@@ -72,10 +73,20 @@ func readFileCached(blobpath string) ([]byte, error) {
 }
 
 func loadTiktokenBpe(tiktokenBpeFile string) (map[string]int, error) {
-	contents, err := readFileCached(tiktokenBpeFile)
-	if err != nil {
-		return nil, err
-	}
+    contents, err := readFileCached(tiktokenBpeFile)
+    if err != nil {
+        return nil, err
+    }
+
+    // Optional integrity check against known hashes (opt-in via env)
+    if os.Getenv("TIKTOKEN_VERIFY_HASH") == "1" {
+        if expected, ok := expectedBPEHashes[tiktokenBpeFile]; ok && expected != "" {
+            actual := fmt.Sprintf("%x", sha256.Sum256(contents))
+            if actual != expected {
+                return nil, fmt.Errorf("bpe file hash mismatch for %s: expected %s got %s", tiktokenBpeFile, expected, actual)
+            }
+        }
+    }
 
 	bpeRanks := make(map[string]int)
 	for _, line := range strings.Split(string(contents), "\n") {
@@ -103,5 +114,13 @@ func (l *defaultBpeLoader) LoadTiktokenBpe(tiktokenBpeFile string) (map[string]i
 }
 
 func NewDefaultBpeLoader() BpeLoader {
-	return &defaultBpeLoader{}
+    return &defaultBpeLoader{}
+}
+
+// expectedBPEHashes are the upstream SHA-256 digests for official BPE files
+var expectedBPEHashes = map[string]string{
+    "https://openaipublic.blob.core.windows.net/encodings/r50k_base.tiktoken": "306cd27f03c1a714eca7108e03d66b7dc042abe8c258b44c199a7ed9838dd930",
+    "https://openaipublic.blob.core.windows.net/encodings/p50k_base.tiktoken": "94b5ca7dff4d00767bc256fdd1b27e5b17361d7b8a5f968547f9f23eb70d2069",
+    "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken": "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7",
+    "https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
 }

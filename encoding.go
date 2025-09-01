@@ -1,9 +1,10 @@
 package tiktoken
 
 import (
-	"errors"
-	"strings"
-	"sync"
+    "errors"
+    "strconv"
+    "strings"
+    "sync"
 )
 
 const ENDOFTEXT string = "<|endoftext|>"
@@ -13,63 +14,90 @@ const FIM_SUFFIX string = "<|fim_suffix|>"
 const ENDOFPROMPT string = "<|endofprompt|>"
 
 const (
-	MODEL_O200K_BASE  string = "o200k_base"
-	MODEL_CL100K_BASE string = "cl100k_base"
-	MODEL_P50K_BASE   string = "p50k_base"
-	MODEL_P50K_EDIT   string = "p50k_edit"
-	MODEL_R50K_BASE   string = "r50k_base"
+    MODEL_O200K_BASE  string = "o200k_base"
+    MODEL_O200K_HARMONY string = "o200k_harmony"
+    MODEL_CL100K_BASE string = "cl100k_base"
+    MODEL_P50K_BASE   string = "p50k_base"
+    MODEL_P50K_EDIT   string = "p50k_edit"
+    MODEL_R50K_BASE   string = "r50k_base"
 )
 
 var MODEL_TO_ENCODING = map[string]string{
-	// chat
-	"gpt-4o":        MODEL_O200K_BASE,
-	"gpt-4":         MODEL_CL100K_BASE,
-	"gpt-3.5-turbo": MODEL_CL100K_BASE,
-	// text
-	"text-davinci-003": MODEL_P50K_BASE,
-	"text-davinci-002": MODEL_P50K_BASE,
-	"text-davinci-001": MODEL_R50K_BASE,
-	"text-curie-001":   MODEL_R50K_BASE,
-	"text-babbage-001": MODEL_R50K_BASE,
-	"text-ada-001":     MODEL_R50K_BASE,
-	"davinci":          MODEL_R50K_BASE,
-	"curie":            MODEL_R50K_BASE,
-	"babbage":          MODEL_R50K_BASE,
-	"ada":              MODEL_R50K_BASE,
-	// code
+    // reasoning
+    "o1":       MODEL_O200K_BASE,
+    "o3":       MODEL_O200K_BASE,
+    "o4-mini":  MODEL_O200K_BASE,
+    // chat
+    "gpt-4.1":       MODEL_O200K_BASE,
+    "gpt-4o":        MODEL_O200K_BASE,
+    "gpt-4":         MODEL_CL100K_BASE,
+    "gpt-3.5-turbo": MODEL_CL100K_BASE,
+    "gpt-3.5":       MODEL_CL100K_BASE, // shorthand
+    "gpt-35-turbo":  MODEL_CL100K_BASE, // Azure deployment name
+    // text
+    "text-davinci-003": MODEL_P50K_BASE,
+    "text-davinci-002": MODEL_P50K_BASE,
+    "text-davinci-001": MODEL_R50K_BASE,
+    "text-curie-001":   MODEL_R50K_BASE,
+    "text-babbage-001": MODEL_R50K_BASE,
+    "text-ada-001":     MODEL_R50K_BASE,
+    // newer base
+    "davinci-002": MODEL_CL100K_BASE,
+    "babbage-002": MODEL_CL100K_BASE,
+    "davinci":          MODEL_R50K_BASE,
+    "curie":            MODEL_R50K_BASE,
+    "babbage":          MODEL_R50K_BASE,
+    "ada":              MODEL_R50K_BASE,
+    // code
 	"code-davinci-002": MODEL_P50K_BASE,
 	"code-davinci-001": MODEL_P50K_BASE,
 	"code-cushman-002": MODEL_P50K_BASE,
 	"code-cushman-001": MODEL_P50K_BASE,
 	"davinci-codex":    MODEL_P50K_BASE,
 	"cushman-codex":    MODEL_P50K_BASE,
-	// edit
-	"text-davinci-edit-001": MODEL_P50K_EDIT,
-	"code-davinci-edit-001": MODEL_P50K_EDIT,
-	// embeddings
-	"text-embedding-ada-002": MODEL_CL100K_BASE,
-	"text-embedding-3-large": MODEL_CL100K_BASE,
-	"text-embedding-3-small": MODEL_CL100K_BASE,
-	// old embeddings
-	"text-similarity-davinci-001":  MODEL_R50K_BASE,
-	"text-similarity-curie-001":    MODEL_R50K_BASE,
-	"text-similarity-babbage-001":  MODEL_R50K_BASE,
-	"text-similarity-ada-001":      MODEL_R50K_BASE,
+    // edit
+    "text-davinci-edit-001": MODEL_P50K_EDIT,
+    "code-davinci-edit-001": MODEL_P50K_EDIT,
+    // embeddings
+    "text-embedding-ada-002": MODEL_CL100K_BASE,
+    "text-embedding-3-large": MODEL_CL100K_BASE,
+    "text-embedding-3-small": MODEL_CL100K_BASE,
+    // fine-tuned
+    "ft:gpt-4o":           MODEL_O200K_BASE,
+    "ft:gpt-4":            MODEL_CL100K_BASE,
+    "ft:gpt-3.5-turbo":    MODEL_CL100K_BASE,
+    "ft:davinci-002":      MODEL_CL100K_BASE,
+    "ft:babbage-002":      MODEL_CL100K_BASE,
+    // old embeddings
+    "text-similarity-davinci-001":  MODEL_R50K_BASE,
+    "text-similarity-curie-001":    MODEL_R50K_BASE,
+    "text-similarity-babbage-001":  MODEL_R50K_BASE,
+    "text-similarity-ada-001":      MODEL_R50K_BASE,
 	"text-search-davinci-doc-001":  MODEL_R50K_BASE,
 	"text-search-curie-doc-001":    MODEL_R50K_BASE,
 	"text-search-babbage-doc-001":  MODEL_R50K_BASE,
 	"text-search-ada-doc-001":      MODEL_R50K_BASE,
 	"code-search-babbage-code-001": MODEL_R50K_BASE,
 	"code-search-ada-code-001":     MODEL_R50K_BASE,
-	// open source
-	"gpt2": "gpt2",
+    // open source
+    "gpt2":  "gpt2",
+    "gpt-2": "gpt2", // alias for consistency
 }
 
 var MODEL_PREFIX_TO_ENCODING = map[string]string{
-	// chat
-	"gpt-4o-":        MODEL_O200K_BASE,  // e.g., gpt-4o-2024-05-13, etc.
-	"gpt-4-":         MODEL_CL100K_BASE, // e.g., gpt-4-0314, etc., plus gpt-4-32k
-	"gpt-3.5-turbo-": MODEL_CL100K_BASE, // e.g, gpt-3.5-turbo-0301, -0401, etc.
+    // chat
+    "o1-":            MODEL_O200K_BASE,
+    "o3-":            MODEL_O200K_BASE,
+    "o4-mini-":       MODEL_O200K_BASE,
+    "gpt-5-":         MODEL_O200K_BASE,
+    "gpt-4.5-":       MODEL_O200K_BASE,
+    "gpt-4.1-":       MODEL_O200K_BASE,
+    "chatgpt-4o-":    MODEL_O200K_BASE,
+    "gpt-4o-":        MODEL_O200K_BASE,  // e.g., gpt-4o-2024-05-13, etc.
+    "gpt-4-":         MODEL_CL100K_BASE, // e.g., gpt-4-0314, etc., plus gpt-4-32k
+    "gpt-3.5-turbo-": MODEL_CL100K_BASE, // e.g, gpt-3.5-turbo-0301, -0401, etc.
+    "gpt-35-turbo-":  MODEL_CL100K_BASE, // Azure deployment prefix
+    "gpt-oss-":       MODEL_O200K_HARMONY,
 }
 
 var encodingMap map[string]*Encoding
@@ -103,14 +131,16 @@ func getEncoding(encodingName string) (*Encoding, error) {
 }
 
 func initEncoding(encodingName string) (*Encoding, error) {
-	switch encodingName {
-	case MODEL_O200K_BASE:
-		return o200k_base()
-	case MODEL_CL100K_BASE:
-		return cl100k_base()
-	case MODEL_P50K_BASE:
-		return p50k_base()
-	case MODEL_R50K_BASE:
+    switch encodingName {
+    case MODEL_O200K_BASE:
+        return o200k_base()
+    case MODEL_O200K_HARMONY:
+        return o200k_harmony()
+    case MODEL_CL100K_BASE:
+        return cl100k_base()
+    case MODEL_P50K_BASE:
+        return p50k_base()
+    case MODEL_R50K_BASE:
 		return r50k_base()
 	case MODEL_P50K_EDIT:
 		return p50k_edit()
@@ -120,10 +150,10 @@ func initEncoding(encodingName string) (*Encoding, error) {
 }
 
 func o200k_base() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken")
-	if err != nil {
-		return nil, err
-	}
+    ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken")
+    if err != nil {
+        return nil, err
+    }
 	special_tokens := map[string]int{
 		ENDOFTEXT:   199999,
 		ENDOFPROMPT: 200018,
@@ -143,6 +173,44 @@ func o200k_base() (*Encoding, error) {
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
+}
+
+func o200k_harmony() (*Encoding, error) {
+    base, err := o200k_base()
+    if err != nil {
+        return nil, err
+    }
+    // Copy special tokens and extend per upstream o200k_harmony
+    specialTokens := make(map[string]int, len(base.SpecialTokens)+1100)
+    for k, v := range base.SpecialTokens {
+        specialTokens[k] = v
+    }
+    specialTokens["<|startoftext|>"] = 199998
+    specialTokens["<|endoftext|>"] = 199999
+    specialTokens["<|reserved_200000|>"] = 200000
+    specialTokens["<|reserved_200001|>"] = 200001
+    specialTokens["<|return|>"] = 200002
+    specialTokens["<|constrain|>"] = 200003
+    specialTokens["<|reserved_200004|>"] = 200004
+    specialTokens["<|channel|>"] = 200005
+    specialTokens["<|start|>"] = 200006
+    specialTokens["<|end|>"] = 200007
+    specialTokens["<|message|>"] = 200008
+    specialTokens["<|reserved_200009|>"] = 200009
+    specialTokens["<|reserved_200010|>"] = 200010
+    specialTokens["<|reserved_200011|>"] = 200011
+    specialTokens["<|call|>"] = 200012
+    for i := 200013; i <= 201087; i++ {
+        key := "<|reserved_" + strconv.Itoa(i) + "|>"
+        specialTokens[key] = i
+    }
+    return &Encoding{
+        Name:           MODEL_O200K_HARMONY,
+        PatStr:         base.PatStr,
+        MergeableRanks: base.MergeableRanks,
+        SpecialTokens:  specialTokens,
+        ExplicitNVocab: 0,
+    }, nil
 }
 
 func cl100k_base() (*Encoding, error) {
