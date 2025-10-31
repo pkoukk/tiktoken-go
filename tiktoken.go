@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-
-	"github.com/dlclark/regexp2"
 )
 
 var bpeLoader BpeLoader = NewDefaultBpeLoader()
@@ -90,22 +88,17 @@ func (t *Tiktoken) Decode(tokens []int) string {
 	return string(t.bpe.decodeNative(tokens))
 }
 
-func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regexp2.Regexp {
+func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regexp.Regexp {
 	specialRegexStrs := make([]string, 0, len(disallowedSpecialSet))
 	for k := range disallowedSpecialSet {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
 	}
-	specialRegex := regexp2.MustCompile(strings.Join(specialRegexStrs, "|"), regexp2.None)
+	specialRegex := regexp.MustCompile(strings.Join(specialRegexStrs, "|"))
 	return specialRegex
 }
 
-func findRegex2StringMatch(text string, reg *regexp2.Regexp) string {
-	m, _ := reg.FindStringMatch(text)
-	if m == nil {
-		return ""
-	}
-
-	return m.String()
+func findRegex2StringMatch(text string, reg *regexp.Regexp) string {
+	return reg.FindString(text)
 }
 
 func difference(setA, setB map[string]any) map[string]any {

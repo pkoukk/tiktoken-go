@@ -142,7 +142,6 @@ func o200k_base() (*Encoding, error) {
 		`\p{N}{1,3}`,
 		` ?[^\s\p{L}\p{N}]+[\r\n/]*`,
 		`\s*[\r\n]+`,
-		`\s+(?!\S)`,
 		`\s+`,
 	}
 	return &Encoding{
@@ -167,7 +166,7 @@ func cl100k_base() (*Encoding, error) {
 	}
 	return &Encoding{
 		Name:           MODEL_CL100K_BASE,
-		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`,
+		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -181,7 +180,7 @@ func p50k_edit() (*Encoding, error) {
 	special_tokens := map[string]int{ENDOFTEXT: 50256, FIM_PREFIX: 50281, FIM_MIDDLE: 50282, FIM_SUFFIX: 50283}
 	return &Encoding{
 		Name:           MODEL_P50K_EDIT,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -203,7 +202,7 @@ func p50k_base() (*Encoding, error) {
 
 	return &Encoding{
 		Name:           MODEL_P50K_BASE,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50281,
@@ -219,7 +218,7 @@ func r50k_base() (*Encoding, error) {
 	return &Encoding{
 		Name:           MODEL_R50K_BASE,
 		MergeableRanks: ranks,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50257,
 	}, nil

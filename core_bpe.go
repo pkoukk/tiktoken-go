@@ -7,8 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-
-	"github.com/dlclark/regexp2"
+	"unicode/utf8"
 )
 
 type CoreBPE struct {
@@ -16,13 +15,13 @@ type CoreBPE struct {
 	decoder              map[int]string
 	specialTokensEncoder map[string]int
 	specialTokensDecoder map[int]string
-	tlRegex              *regexp2.Regexp
-	tlSpecialRegex       *regexp2.Regexp
+	tlRegex              *regexp.Regexp
+	tlSpecialRegex       *regexp.Regexp
 	sortedTokenBytes     [][]byte
 }
 
 func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, pattern string) (*CoreBPE, error) {
-	regex, err := regexp2.Compile(pattern, regexp2.None)
+	regex, err := regexp.Compile(pattern)
 	if err != nil {
 		return nil, fmt.Errorf("error compiling regex: %s", err)
 	}
@@ -31,7 +30,7 @@ func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, pat
 	for k := range specialTokensEncoder {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
 	}
-	specialRegex, err := regexp2.Compile(strings.Join(specialRegexStrs, "|"), regexp2.None)
+	specialRegex, err := regexp.Compile(strings.Join(specialRegexStrs, "|"))
 	if err != nil {
 		return nil, fmt.Errorf("error compiling special regex: %s", err)
 	}
@@ -156,26 +155,70 @@ func (bpe *CoreBPE) decodeNative(tokens []int) []byte {
 	return ret
 }
 
-func findRegex2StringIndex(text string, reg *regexp2.Regexp) []int {
-	m, _ := reg.FindStringMatch(text)
-	if m == nil {
+// byteToRuneMap builds a mapping from byte positions to rune positions
+// It returns a slice where byteToRuneMap[i] is the rune index for byte position i
+func byteToRuneMap(s string) []int {
+	if len(s) == 0 {
 		return nil
 	}
-	result := make([]int, 2)
-	result[0] = m.Index
-	result[1] = m.Index + m.Length
-	return result
+	// Pre-allocate with worst-case size (1 byte per rune for ASCII)
+	byteToRune := make([]int, len(s))
+	runeIdx := 0
+	for i := 0; i < len(s); {
+		_, size := utf8.DecodeRuneInString(s[i:])
+		// Fill all byte positions for this rune
+		for j := 0; j < size && i+j < len(s); j++ {
+			byteToRune[i+j] = runeIdx
+		}
+		i += size
+		runeIdx++
+	}
+	return byteToRune
 }
 
-func findRegex2AllStringMatchIndex(text string, reg *regexp2.Regexp) [][]int {
-	var matches [][]int
-	m, _ := reg.FindStringMatch(text)
-	for m != nil {
-		result := make([]int, 2)
-		result[0] = m.Index
-		result[1] = m.Index + m.Length
-		matches = append(matches, result)
-		m, _ = reg.FindNextMatch(m)
+// byteIndicesToRuneIndices converts byte indices [start, end) to rune indices using a pre-built map
+func byteIndicesToRuneIndicesWithMap(byteToRune []int, byteStart, byteEnd int) (runeStart, runeEnd int) {
+	if len(byteToRune) == 0 {
+		return 0, 0
+	}
+	if byteStart >= len(byteToRune) {
+		byteStart = len(byteToRune) - 1
+	}
+	if byteEnd > len(byteToRune) {
+		byteEnd = len(byteToRune)
+	}
+	if byteEnd == 0 {
+		runeStart = 0
+		runeEnd = 0
+		return
+	}
+	// byteEnd is exclusive, so we want the rune index at byteEnd-1
+	runeStart = byteToRune[byteStart]
+	runeEnd = byteToRune[byteEnd-1] + 1
+	return runeStart, runeEnd
+}
+
+func findRegex2StringIndex(text string, reg *regexp.Regexp) []int {
+	indices := reg.FindStringIndex(text)
+	if indices == nil {
+		return nil
+	}
+	byteToRune := byteToRuneMap(text)
+	runeStart, runeEnd := byteIndicesToRuneIndicesWithMap(byteToRune, indices[0], indices[1])
+	return []int{runeStart, runeEnd}
+}
+
+func findRegex2AllStringMatchIndex(text string, reg *regexp.Regexp) [][]int {
+	allIndices := reg.FindAllStringIndex(text, -1)
+	if allIndices == nil {
+		return nil
+	}
+	// Build byte-to-rune mapping once for the entire string
+	byteToRune := byteToRuneMap(text)
+	matches := make([][]int, len(allIndices))
+	for i, indices := range allIndices {
+		runeStart, runeEnd := byteIndicesToRuneIndicesWithMap(byteToRune, indices[0], indices[1])
+		matches[i] = []int{runeStart, runeEnd}
 	}
 	return matches
 }
