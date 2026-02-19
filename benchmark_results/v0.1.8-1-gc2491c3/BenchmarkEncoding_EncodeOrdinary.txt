@@ -1,0 +1,16 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_EncodeOrdinary/Encode-10         	    2594	    899715 ns/op	  519548 B/op	    6634 allocs/op
+BenchmarkEncoding_EncodeOrdinary/Encode-10         	    2646	    901867 ns/op	  519546 B/op	    6634 allocs/op
+BenchmarkEncoding_EncodeOrdinary/Encode-10         	    2622	   1100165 ns/op	  519552 B/op	    6634 allocs/op
+BenchmarkEncoding_EncodeOrdinary/Encode-10         	    2637	    913187 ns/op	  519542 B/op	    6634 allocs/op
+BenchmarkEncoding_EncodeOrdinary/Encode-10         	    2678	    899382 ns/op	  519536 B/op	    6634 allocs/op
+BenchmarkEncoding_EncodeOrdinary/EncodeOrdinary-10 	    2822	    848646 ns/op	  491382 B/op	    6631 allocs/op
+BenchmarkEncoding_EncodeOrdinary/EncodeOrdinary-10 	    2738	    857808 ns/op	  491382 B/op	    6631 allocs/op
+BenchmarkEncoding_EncodeOrdinary/EncodeOrdinary-10 	    2776	    846950 ns/op	  491395 B/op	    6631 allocs/op
+BenchmarkEncoding_EncodeOrdinary/EncodeOrdinary-10 	    2827	    847677 ns/op	  491379 B/op	    6631 allocs/op
+BenchmarkEncoding_EncodeOrdinary/EncodeOrdinary-10 	    2814	    846175 ns/op	  491382 B/op	    6631 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	26.128s

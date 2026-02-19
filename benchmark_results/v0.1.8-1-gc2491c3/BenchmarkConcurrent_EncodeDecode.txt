@@ -1,0 +1,11 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkConcurrent_EncodeDecode-10    	    3374	    701046 ns/op	  539295 B/op	    6639 allocs/op
+BenchmarkConcurrent_EncodeDecode-10    	    3478	    723050 ns/op	  539293 B/op	    6639 allocs/op
+BenchmarkConcurrent_EncodeDecode-10    	    2110	   1434574 ns/op	  539298 B/op	    6639 allocs/op
+BenchmarkConcurrent_EncodeDecode-10    	    3403	    693515 ns/op	  539282 B/op	    6639 allocs/op
+BenchmarkConcurrent_EncodeDecode-10    	    3452	    738785 ns/op	  539294 B/op	    6639 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	15.018s
