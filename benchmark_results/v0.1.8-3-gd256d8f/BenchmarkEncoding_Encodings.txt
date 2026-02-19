@@ -1,0 +1,26 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_Encodings/o200k_base-10         	    2768	    857826 ns/op	  217012 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/o200k_base-10         	    2767	    849871 ns/op	  216975 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/o200k_base-10         	    2724	    848668 ns/op	  217077 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/o200k_base-10         	    2754	    857457 ns/op	  216909 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/o200k_base-10         	    2756	    850930 ns/op	  217077 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/cl100k_base-10        	    4471	    534385 ns/op	  216928 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/cl100k_base-10        	    4374	    531947 ns/op	  216835 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/cl100k_base-10        	    4515	    535470 ns/op	  216940 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/cl100k_base-10        	    4434	    529323 ns/op	  216932 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/cl100k_base-10        	    4543	    526068 ns/op	  216882 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/p50k_base-10          	    4567	    483967 ns/op	  216866 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/p50k_base-10          	    4986	    478687 ns/op	  216827 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/p50k_base-10          	    4766	    476590 ns/op	  216863 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/p50k_base-10          	    5017	    546938 ns/op	  216742 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/p50k_base-10          	    5077	    469774 ns/op	  216791 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/r50k_base-10          	    4983	    474157 ns/op	  216879 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/r50k_base-10          	    4674	    539804 ns/op	  216763 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/r50k_base-10          	    4431	    521394 ns/op	  216825 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/r50k_base-10          	    4382	    505734 ns/op	  216923 B/op	    2227 allocs/op
+BenchmarkEncoding_Encodings/r50k_base-10          	    4626	    551203 ns/op	  216862 B/op	    2227 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	65.169s

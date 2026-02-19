@@ -1,0 +1,21 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_Allocations/small-10         	 1000000	      2166 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Allocations/small-10         	 1000000	      2079 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Allocations/small-10         	 1000000	      2148 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Allocations/small-10         	 1203828	      2054 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Allocations/small-10         	 1000000	      2207 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Allocations/medium-10        	    2653	    929563 ns/op	  216979 B/op	    2227 allocs/op
+BenchmarkEncoding_Allocations/medium-10        	    2886	    898079 ns/op	  216913 B/op	    2227 allocs/op
+BenchmarkEncoding_Allocations/medium-10        	    2878	    891740 ns/op	  216918 B/op	    2227 allocs/op
+BenchmarkEncoding_Allocations/medium-10        	    2890	    933674 ns/op	  216903 B/op	    2227 allocs/op
+BenchmarkEncoding_Allocations/medium-10        	    2342	    890958 ns/op	  216970 B/op	    2227 allocs/op
+BenchmarkEncoding_Allocations/large-10         	     226	  12478513 ns/op	 3332446 B/op	   26045 allocs/op
+BenchmarkEncoding_Allocations/large-10         	     224	  10946314 ns/op	 3332443 B/op	   26045 allocs/op
+BenchmarkEncoding_Allocations/large-10         	     216	  10511566 ns/op	 3332528 B/op	   26045 allocs/op
+BenchmarkEncoding_Allocations/large-10         	     225	  10519500 ns/op	 3332505 B/op	   26045 allocs/op
+BenchmarkEncoding_Allocations/large-10         	     228	  10539766 ns/op	 3332509 B/op	   26045 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	59.712s

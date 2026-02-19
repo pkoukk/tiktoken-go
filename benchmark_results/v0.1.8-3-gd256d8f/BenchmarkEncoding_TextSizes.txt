@@ -1,0 +1,21 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_TextSizes/small-10         	 1000000	      2040 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextSizes/small-10         	 1000000	      2012 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextSizes/small-10         	 1000000	      2151 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextSizes/small-10         	 1000000	      2064 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextSizes/small-10         	 1000000	      2037 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextSizes/medium-10        	    2892	    923639 ns/op	  216890 B/op	    2227 allocs/op
+BenchmarkEncoding_TextSizes/medium-10        	    2874	    983871 ns/op	  216765 B/op	    2227 allocs/op
+BenchmarkEncoding_TextSizes/medium-10        	    2822	    882299 ns/op	  216886 B/op	    2227 allocs/op
+BenchmarkEncoding_TextSizes/medium-10        	    2850	    943911 ns/op	  216867 B/op	    2227 allocs/op
+BenchmarkEncoding_TextSizes/medium-10        	    2672	    872447 ns/op	  216901 B/op	    2227 allocs/op
+BenchmarkEncoding_TextSizes/large-10         	     226	  10542263 ns/op	 3332504 B/op	   26045 allocs/op
+BenchmarkEncoding_TextSizes/large-10         	     225	  10782999 ns/op	 3332557 B/op	   26045 allocs/op
+BenchmarkEncoding_TextSizes/large-10         	     226	  10593247 ns/op	 3332424 B/op	   26044 allocs/op
+BenchmarkEncoding_TextSizes/large-10         	     222	  10646395 ns/op	 3332541 B/op	   26045 allocs/op
+BenchmarkEncoding_TextSizes/large-10         	     219	  12957587 ns/op	 3332672 B/op	   26046 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	57.497s

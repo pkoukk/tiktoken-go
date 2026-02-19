@@ -1,0 +1,31 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_Scaling/Size_10^0-10         	 1000000	      2032 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Scaling/Size_10^0-10         	 1000000	      2405 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Scaling/Size_10^0-10         	 1188176	      2036 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Scaling/Size_10^0-10         	 1000000	      2079 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Scaling/Size_10^0-10         	 1000000	      2120 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_Scaling/Size_10^1-10         	  152455	     16430 ns/op	    7695 B/op	      95 allocs/op
+BenchmarkEncoding_Scaling/Size_10^1-10         	  150198	     15703 ns/op	    7697 B/op	      95 allocs/op
+BenchmarkEncoding_Scaling/Size_10^1-10         	  150829	     16185 ns/op	    7696 B/op	      95 allocs/op
+BenchmarkEncoding_Scaling/Size_10^1-10         	  145492	     16745 ns/op	    7698 B/op	      95 allocs/op
+BenchmarkEncoding_Scaling/Size_10^1-10         	  149125	     16698 ns/op	    7696 B/op	      95 allocs/op
+BenchmarkEncoding_Scaling/Size_10^2-10         	   13576	    172939 ns/op	   73922 B/op	     821 allocs/op
+BenchmarkEncoding_Scaling/Size_10^2-10         	   14035	    173408 ns/op	   73903 B/op	     821 allocs/op
+BenchmarkEncoding_Scaling/Size_10^2-10         	   14031	    192019 ns/op	   73901 B/op	     821 allocs/op
+BenchmarkEncoding_Scaling/Size_10^2-10         	   10000	    225880 ns/op	   73899 B/op	     821 allocs/op
+BenchmarkEncoding_Scaling/Size_10^2-10         	   11966	    184793 ns/op	   73893 B/op	     821 allocs/op
+BenchmarkEncoding_Scaling/Size_10^3-10         	     774	   2800616 ns/op	  856982 B/op	    8032 allocs/op
+BenchmarkEncoding_Scaling/Size_10^3-10         	     859	   2805953 ns/op	  856967 B/op	    8032 allocs/op
+BenchmarkEncoding_Scaling/Size_10^3-10         	     868	   2871956 ns/op	  856923 B/op	    8032 allocs/op
+BenchmarkEncoding_Scaling/Size_10^3-10         	     842	   2883832 ns/op	  856935 B/op	    8032 allocs/op
+BenchmarkEncoding_Scaling/Size_10^3-10         	     876	   2804258 ns/op	  856969 B/op	    8032 allocs/op
+BenchmarkEncoding_Scaling/Size_10^4-10         	      93	  37101463 ns/op	10138638 B/op	   80056 allocs/op
+BenchmarkEncoding_Scaling/Size_10^4-10         	      92	  31295054 ns/op	10138771 B/op	   80057 allocs/op
+BenchmarkEncoding_Scaling/Size_10^4-10         	      93	  27438432 ns/op	10138185 B/op	   80057 allocs/op
+BenchmarkEncoding_Scaling/Size_10^4-10         	      93	  27947052 ns/op	10138741 B/op	   80059 allocs/op
+BenchmarkEncoding_Scaling/Size_10^4-10         	      92	  30259059 ns/op	10138583 B/op	   80058 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	92.160s

@@ -1,0 +1,26 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkRoundTrip/small-10         	 1000000	      2156 ns/op	     680 B/op	      17 allocs/op
+BenchmarkRoundTrip/small-10         	 1000000	      2229 ns/op	     680 B/op	      17 allocs/op
+BenchmarkRoundTrip/small-10         	 1000000	      2130 ns/op	     680 B/op	      17 allocs/op
+BenchmarkRoundTrip/small-10         	 1000000	      2087 ns/op	     680 B/op	      17 allocs/op
+BenchmarkRoundTrip/small-10         	 1000000	      2072 ns/op	     680 B/op	      17 allocs/op
+BenchmarkRoundTrip/medium-10        	    2817	    928817 ns/op	  236630 B/op	    2232 allocs/op
+BenchmarkRoundTrip/medium-10        	    2739	    954632 ns/op	  236639 B/op	    2232 allocs/op
+BenchmarkRoundTrip/medium-10        	    2800	    887453 ns/op	  236650 B/op	    2232 allocs/op
+BenchmarkRoundTrip/medium-10        	    2810	    893921 ns/op	  236705 B/op	    2232 allocs/op
+BenchmarkRoundTrip/medium-10        	    2821	    903570 ns/op	  236644 B/op	    2232 allocs/op
+BenchmarkRoundTrip/unicode-10       	  233121	      9895 ns/op	    4711 B/op	      47 allocs/op
+BenchmarkRoundTrip/unicode-10       	  250298	      9890 ns/op	    4710 B/op	      47 allocs/op
+BenchmarkRoundTrip/unicode-10       	  243436	      9920 ns/op	    4708 B/op	      47 allocs/op
+BenchmarkRoundTrip/unicode-10       	  246037	     10032 ns/op	    4710 B/op	      47 allocs/op
+BenchmarkRoundTrip/unicode-10       	  256827	     10259 ns/op	    4710 B/op	      47 allocs/op
+BenchmarkRoundTrip/mixed-10         	  316135	      7985 ns/op	    3355 B/op	      47 allocs/op
+BenchmarkRoundTrip/mixed-10         	  299932	      9703 ns/op	    3355 B/op	      47 allocs/op
+BenchmarkRoundTrip/mixed-10         	  275258	      7817 ns/op	    3356 B/op	      47 allocs/op
+BenchmarkRoundTrip/mixed-10         	  282601	      9025 ns/op	    3356 B/op	      47 allocs/op
+BenchmarkRoundTrip/mixed-10         	  308138	      8165 ns/op	    3355 B/op	      47 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	68.141s

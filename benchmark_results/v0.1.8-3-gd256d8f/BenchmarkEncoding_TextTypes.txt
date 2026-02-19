@@ -1,0 +1,26 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_TextTypes/small-10         	 1000000	      2057 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextTypes/small-10         	 1000000	      2001 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextTypes/small-10         	 1000000	      2073 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextTypes/small-10         	 1000000	      2039 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextTypes/small-10         	 1000000	      2034 ns/op	     664 B/op	      16 allocs/op
+BenchmarkEncoding_TextTypes/unicode-10       	  257720	      9742 ns/op	    4311 B/op	      43 allocs/op
+BenchmarkEncoding_TextTypes/unicode-10       	  222937	     10833 ns/op	    4309 B/op	      43 allocs/op
+BenchmarkEncoding_TextTypes/unicode-10       	  241518	      9163 ns/op	    4309 B/op	      43 allocs/op
+BenchmarkEncoding_TextTypes/unicode-10       	  263599	      9132 ns/op	    4309 B/op	      43 allocs/op
+BenchmarkEncoding_TextTypes/unicode-10       	  256981	      9381 ns/op	    4308 B/op	      43 allocs/op
+BenchmarkEncoding_TextTypes/code-10          	    6985	    347563 ns/op	  115639 B/op	    1223 allocs/op
+BenchmarkEncoding_TextTypes/code-10          	    7316	    341965 ns/op	  115640 B/op	    1223 allocs/op
+BenchmarkEncoding_TextTypes/code-10          	    5692	    355897 ns/op	  115611 B/op	    1223 allocs/op
+BenchmarkEncoding_TextTypes/code-10          	    7062	    337809 ns/op	  115649 B/op	    1223 allocs/op
+BenchmarkEncoding_TextTypes/code-10          	    7326	    334379 ns/op	  115629 B/op	    1223 allocs/op
+BenchmarkEncoding_TextTypes/mixed-10         	  327316	      7505 ns/op	    3083 B/op	      44 allocs/op
+BenchmarkEncoding_TextTypes/mixed-10         	  323000	      7774 ns/op	    3083 B/op	      44 allocs/op
+BenchmarkEncoding_TextTypes/mixed-10         	  340564	      7336 ns/op	    3083 B/op	      44 allocs/op
+BenchmarkEncoding_TextTypes/mixed-10         	  319557	      9238 ns/op	    3084 B/op	      44 allocs/op
+BenchmarkEncoding_TextTypes/mixed-10         	  318124	      7261 ns/op	    3083 B/op	      44 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	64.700s
