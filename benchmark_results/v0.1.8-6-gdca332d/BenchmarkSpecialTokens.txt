@@ -1,0 +1,21 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkSpecialTokens/WithAllowedSpecial-10         	 1000000	      2427 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllowedSpecial-10         	 1000000	      2013 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllowedSpecial-10         	 1000000	      2004 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllowedSpecial-10         	 1203403	      2086 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllowedSpecial-10         	 1200109	      1999 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllAllowedSpecial-10      	 1220034	      1985 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllAllowedSpecial-10      	 1203381	      2038 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllAllowedSpecial-10      	 1217836	      1990 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllAllowedSpecial-10      	 1000000	      2043 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/WithAllAllowedSpecial-10      	 1206913	      2064 ns/op	     680 B/op	      11 allocs/op
+BenchmarkSpecialTokens/EncodeOrdinary_IgnoresSpecial-10         	  748550	      2955 ns/op	     840 B/op	      17 allocs/op
+BenchmarkSpecialTokens/EncodeOrdinary_IgnoresSpecial-10         	  882950	      2768 ns/op	     841 B/op	      17 allocs/op
+BenchmarkSpecialTokens/EncodeOrdinary_IgnoresSpecial-10         	  863077	      2757 ns/op	     840 B/op	      17 allocs/op
+BenchmarkSpecialTokens/EncodeOrdinary_IgnoresSpecial-10         	  875673	      2737 ns/op	     840 B/op	      17 allocs/op
+BenchmarkSpecialTokens/EncodeOrdinary_IgnoresSpecial-10         	  878863	      2767 ns/op	     840 B/op	      17 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	64.513s

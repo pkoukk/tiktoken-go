@@ -1,0 +1,36 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_Models/gpt-4o-10         	    3073	    736765 ns/op	  102791 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4o-10         	    3135	    735654 ns/op	  102880 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4o-10         	    3096	    735313 ns/op	  102799 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4o-10         	    3027	    738472 ns/op	  102791 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4o-10         	    3109	    733603 ns/op	  102850 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4-10          	    5506	    520042 ns/op	  102651 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4-10          	    5510	    441262 ns/op	  102670 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4-10          	    5314	    447186 ns/op	  102613 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4-10          	    5403	    447371 ns/op	  102656 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-4-10          	    5436	    456101 ns/op	  102609 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-3.5-turbo-10  	    5404	    449211 ns/op	  102571 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-3.5-turbo-10  	    5516	    439891 ns/op	  102680 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-3.5-turbo-10  	    5452	    443739 ns/op	  102578 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-3.5-turbo-10  	    5412	    445043 ns/op	  102639 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/gpt-3.5-turbo-10  	    5492	    438389 ns/op	  102592 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-003-10         	    6192	    388596 ns/op	  102600 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-003-10         	    6194	    391389 ns/op	  102607 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-003-10         	    5532	    399781 ns/op	  102618 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-003-10         	    6153	    394590 ns/op	  102626 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-003-10         	    6163	    393950 ns/op	  102582 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-002-10         	    6175	    390952 ns/op	  102600 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-002-10         	    6150	    391820 ns/op	  102612 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-002-10         	    6175	    389677 ns/op	  102600 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-002-10         	    6194	    389199 ns/op	  102600 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-davinci-002-10         	    6124	    391816 ns/op	  102588 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-embedding-ada-002-10   	    5457	    446257 ns/op	  102659 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-embedding-ada-002-10   	    5457	    443331 ns/op	  102673 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-embedding-ada-002-10   	    5416	    437430 ns/op	  102643 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-embedding-ada-002-10   	    5488	    472594 ns/op	  102645 B/op	    1121 allocs/op
+BenchmarkEncoding_Models/text-embedding-ada-002-10   	    5329	    455123 ns/op	  102594 B/op	    1121 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	94.050s

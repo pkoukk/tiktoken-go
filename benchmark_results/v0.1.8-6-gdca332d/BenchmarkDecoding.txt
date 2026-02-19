@@ -1,0 +1,26 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkDecoding/Decode-10         	  200660	     11010 ns/op	   19712 B/op	       5 allocs/op
+BenchmarkDecoding/Decode-10         	  199620	     11005 ns/op	   19712 B/op	       5 allocs/op
+BenchmarkDecoding/Decode-10         	  210745	     12454 ns/op	   19712 B/op	       5 allocs/op
+BenchmarkDecoding/Decode-10         	  196501	     11935 ns/op	   19712 B/op	       5 allocs/op
+BenchmarkDecoding/Decode-10         	  215808	     11613 ns/op	   19712 B/op	       5 allocs/op
+BenchmarkDecoding/Decode_10_tokens-10         	18559324	       124.1 ns/op	      96 B/op	       2 allocs/op
+BenchmarkDecoding/Decode_10_tokens-10         	19236510	       125.6 ns/op	      96 B/op	       2 allocs/op
+BenchmarkDecoding/Decode_10_tokens-10         	19215500	       121.6 ns/op	      96 B/op	       2 allocs/op
+BenchmarkDecoding/Decode_10_tokens-10         	19381657	       125.2 ns/op	      96 B/op	       2 allocs/op
+BenchmarkDecoding/Decode_10_tokens-10         	18892777	       122.8 ns/op	      96 B/op	       2 allocs/op
+BenchmarkDecoding/Decode_100_tokens-10        	 2401252	      1007 ns/op	    1040 B/op	       3 allocs/op
+BenchmarkDecoding/Decode_100_tokens-10        	 2114335	      1023 ns/op	    1040 B/op	       3 allocs/op
+BenchmarkDecoding/Decode_100_tokens-10        	 2219289	      1027 ns/op	    1040 B/op	       3 allocs/op
+BenchmarkDecoding/Decode_100_tokens-10        	 2312972	      1021 ns/op	    1040 B/op	       3 allocs/op
+BenchmarkDecoding/Decode_100_tokens-10        	 2391050	      1029 ns/op	    1040 B/op	       3 allocs/op
+BenchmarkDecoding/Decode_1000_tokens-10       	  235261	      9570 ns/op	   13312 B/op	       4 allocs/op
+BenchmarkDecoding/Decode_1000_tokens-10       	  242881	      9611 ns/op	   13312 B/op	       4 allocs/op
+BenchmarkDecoding/Decode_1000_tokens-10       	  245756	      9581 ns/op	   13312 B/op	       4 allocs/op
+BenchmarkDecoding/Decode_1000_tokens-10       	  237102	      9585 ns/op	   13312 B/op	       4 allocs/op
+BenchmarkDecoding/Decode_1000_tokens-10       	  247581	      9563 ns/op	   13312 B/op	       4 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	73.554s

@@ -1,0 +1,31 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_SpecialTokenConfigs/NoSpecial-10         	  675996	      3446 ns/op	    1185 B/op	      26 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/NoSpecial-10         	  678081	      3462 ns/op	    1185 B/op	      26 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/NoSpecial-10         	  692994	      3487 ns/op	    1185 B/op	      26 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/NoSpecial-10         	  678640	      3500 ns/op	    1185 B/op	      26 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/NoSpecial-10         	  689584	      3509 ns/op	    1185 B/op	      26 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowEndOfText-10    	  821486	      2952 ns/op	    1033 B/op	      21 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowEndOfText-10    	  832492	      2832 ns/op	    1033 B/op	      21 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowEndOfText-10    	  835616	      2861 ns/op	    1033 B/op	      21 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowEndOfText-10    	  822189	      3455 ns/op	    1033 B/op	      21 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowEndOfText-10    	  825676	      3039 ns/op	    1033 B/op	      21 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowAll-10          	 1000000	      2290 ns/op	     952 B/op	      14 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowAll-10          	 1000000	      2327 ns/op	     953 B/op	      14 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowAll-10          	 1000000	      2323 ns/op	     952 B/op	      14 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowAll-10          	 1000000	      2260 ns/op	     952 B/op	      14 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowAll-10          	 1000000	      2202 ns/op	     952 B/op	      14 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/DisallowAll-10       	  367659	      6583 ns/op	    9318 B/op	      71 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/DisallowAll-10       	  386787	      6611 ns/op	    9317 B/op	      71 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/DisallowAll-10       	  374145	      6588 ns/op	    9319 B/op	      71 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/DisallowAll-10       	  362173	      6579 ns/op	    9319 B/op	      71 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/DisallowAll-10       	  372864	      6599 ns/op	    9318 B/op	      71 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowOneDisallowOther-10         	  411466	      5855 ns/op	    8588 B/op	      59 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowOneDisallowOther-10         	  406960	      5814 ns/op	    8588 B/op	      59 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowOneDisallowOther-10         	  410526	      5831 ns/op	    8588 B/op	      59 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowOneDisallowOther-10         	  389676	      5805 ns/op	    8589 B/op	      59 allocs/op
+BenchmarkEncoding_SpecialTokenConfigs/AllowOneDisallowOther-10         	  395209	      5752 ns/op	    8587 B/op	      59 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	77.714s

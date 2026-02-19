@@ -1,0 +1,36 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_RealisticPatterns/code-10         	  352813	      7040 ns/op	    1545 B/op	      28 allocs/op
+BenchmarkEncoding_RealisticPatterns/code-10         	  360434	      6958 ns/op	    1544 B/op	      28 allocs/op
+BenchmarkEncoding_RealisticPatterns/code-10         	  357723	      6549 ns/op	    1545 B/op	      28 allocs/op
+BenchmarkEncoding_RealisticPatterns/code-10         	  366982	      6677 ns/op	    1544 B/op	      28 allocs/op
+BenchmarkEncoding_RealisticPatterns/code-10         	  364492	      6592 ns/op	    1545 B/op	      28 allocs/op
+BenchmarkEncoding_RealisticPatterns/json-10         	  335708	      6975 ns/op	    2586 B/op	      30 allocs/op
+BenchmarkEncoding_RealisticPatterns/json-10         	  340892	      6921 ns/op	    2585 B/op	      30 allocs/op
+BenchmarkEncoding_RealisticPatterns/json-10         	  335571	      6904 ns/op	    2585 B/op	      30 allocs/op
+BenchmarkEncoding_RealisticPatterns/json-10         	  309571	      6912 ns/op	    2585 B/op	      30 allocs/op
+BenchmarkEncoding_RealisticPatterns/json-10         	  340242	      6968 ns/op	    2585 B/op	      30 allocs/op
+BenchmarkEncoding_RealisticPatterns/markdown-10     	  442160	      5395 ns/op	    1512 B/op	      26 allocs/op
+BenchmarkEncoding_RealisticPatterns/markdown-10     	  445672	      5395 ns/op	    1512 B/op	      26 allocs/op
+BenchmarkEncoding_RealisticPatterns/markdown-10     	  439113	      5511 ns/op	    1513 B/op	      26 allocs/op
+BenchmarkEncoding_RealisticPatterns/markdown-10     	  441442	      5422 ns/op	    1513 B/op	      26 allocs/op
+BenchmarkEncoding_RealisticPatterns/markdown-10     	  435513	      5435 ns/op	    1513 B/op	      26 allocs/op
+BenchmarkEncoding_RealisticPatterns/multiline-10    	   28365	     80437 ns/op	   24179 B/op	     265 allocs/op
+BenchmarkEncoding_RealisticPatterns/multiline-10    	   26635	     80652 ns/op	   24188 B/op	     265 allocs/op
+BenchmarkEncoding_RealisticPatterns/multiline-10    	   29892	     80196 ns/op	   24176 B/op	     265 allocs/op
+BenchmarkEncoding_RealisticPatterns/multiline-10    	   29982	     81436 ns/op	   24180 B/op	     265 allocs/op
+BenchmarkEncoding_RealisticPatterns/multiline-10    	   29272	     80430 ns/op	   24180 B/op	     265 allocs/op
+BenchmarkEncoding_RealisticPatterns/whitespace-10   	   10000	    216880 ns/op	   16221 B/op	       6 allocs/op
+BenchmarkEncoding_RealisticPatterns/whitespace-10   	   10000	    219691 ns/op	   16174 B/op	       6 allocs/op
+BenchmarkEncoding_RealisticPatterns/whitespace-10   	   10000	    216753 ns/op	   16180 B/op	       6 allocs/op
+BenchmarkEncoding_RealisticPatterns/whitespace-10   	   10000	    221001 ns/op	   16222 B/op	       6 allocs/op
+BenchmarkEncoding_RealisticPatterns/whitespace-10   	   10000	    217796 ns/op	   16221 B/op	       6 allocs/op
+BenchmarkEncoding_RealisticPatterns/chat-10         	  457858	      5343 ns/op	    1496 B/op	      25 allocs/op
+BenchmarkEncoding_RealisticPatterns/chat-10         	  439195	      5319 ns/op	    1497 B/op	      25 allocs/op
+BenchmarkEncoding_RealisticPatterns/chat-10         	  452530	      5469 ns/op	    1496 B/op	      25 allocs/op
+BenchmarkEncoding_RealisticPatterns/chat-10         	  447672	      5264 ns/op	    1497 B/op	      25 allocs/op
+BenchmarkEncoding_RealisticPatterns/chat-10         	  453220	      5250 ns/op	    1496 B/op	      25 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	93.560s

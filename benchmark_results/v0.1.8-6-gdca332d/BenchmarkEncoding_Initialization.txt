@@ -1,0 +1,36 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/pkoukk/tiktoken-go
+cpu: Apple M1 Max
+BenchmarkEncoding_Initialization/gpt-4o-10         	      36	  64516350 ns/op	14138420 B/op	  200781 allocs/op
+BenchmarkEncoding_Initialization/gpt-4o-10         	      36	  71405179 ns/op	14137959 B/op	  200781 allocs/op
+BenchmarkEncoding_Initialization/gpt-4o-10         	      36	  74757668 ns/op	14139445 B/op	  200781 allocs/op
+BenchmarkEncoding_Initialization/gpt-4o-10         	      36	  64741181 ns/op	14137967 B/op	  200781 allocs/op
+BenchmarkEncoding_Initialization/gpt-4o-10         	      38	  63739396 ns/op	14137929 B/op	  200781 allocs/op
+BenchmarkEncoding_Initialization/gpt-4-10          	      81	  29815428 ns/op	 6968709 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-4-10          	      82	  30934847 ns/op	 6968738 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-4-10          	      81	  30436943 ns/op	 6968746 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-4-10          	      81	  29652374 ns/op	 6969124 B/op	  100722 allocs/op
+BenchmarkEncoding_Initialization/gpt-4-10          	      81	  30119731 ns/op	 6969204 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-3.5-turbo-10  	      82	  30199735 ns/op	 6968750 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-3.5-turbo-10  	      82	  29407610 ns/op	 6968727 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-3.5-turbo-10  	      84	  29586549 ns/op	 6968633 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-3.5-turbo-10  	      84	  29747312 ns/op	 6968613 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/gpt-3.5-turbo-10  	      82	  29723611 ns/op	 6968596 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-003-10         	     170	  14045161 ns/op	 3499403 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-003-10         	     170	  14004893 ns/op	 3499354 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-003-10         	     170	  14126936 ns/op	 3499401 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-003-10         	     171	  14074214 ns/op	 3499401 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-003-10         	     170	  14061684 ns/op	 3499305 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-002-10         	     169	  14073463 ns/op	 3499525 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-002-10         	     170	  14023690 ns/op	 3499571 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-002-10         	     154	  16804409 ns/op	 3499312 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-002-10         	     165	  14124061 ns/op	 3499580 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-davinci-002-10         	     169	  14472463 ns/op	 3499402 B/op	   50532 allocs/op
+BenchmarkEncoding_Initialization/text-embedding-ada-002-10   	      84	  30506893 ns/op	 6968614 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/text-embedding-ada-002-10   	      81	  29594999 ns/op	 6968534 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/text-embedding-ada-002-10   	      82	  29388061 ns/op	 6968776 B/op	  100722 allocs/op
+BenchmarkEncoding_Initialization/text-embedding-ada-002-10   	      82	  29297658 ns/op	 6968600 B/op	  100721 allocs/op
+BenchmarkEncoding_Initialization/text-embedding-ada-002-10   	      82	  29436989 ns/op	 6968654 B/op	  100721 allocs/op
+PASS
+ok  	github.com/pkoukk/tiktoken-go	103.657s
