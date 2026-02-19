@@ -135,15 +135,13 @@ func TestEncodeSurrogatePairs(t *testing.T) {
 	// Test that the emoji itself encodes correctly (this is what matters in practice)
 	// The emoji codepoint U+1F44D is what gets encoded, regardless of how it was represented
 
-	// Note: Go handles invalid UTF-8 sequences differently than Python.
-	// When Go encounters invalid UTF-8, it may preserve the raw bytes rather than replacing with �.
-	// This is implementation-dependent behavior. The important test is that valid emoji encodes correctly.
-	// For the lone surrogate test, we verify that invalid sequences encode without crashing.
+	// Go strings can contain arbitrary bytes, including invalid UTF-8.
+	// The tokenizer operates on raw bytes (matching the reference Rust implementation),
+	// so invalid UTF-8 sequences are encoded as their individual byte tokens.
 	invalidUTF8 := string([]byte{0xED, 0xA0, 0xBD}) // Invalid UTF-8 sequence
 	tokens3 := enc.Encode(invalidUTF8, nil, nil)
-	// Invalid UTF-8 encodes to [58432] in current implementation
 	ass.NotEmpty(tokens3, "Invalid UTF-8 should encode to some tokens")
-	ass.Equal([]int{58432}, tokens3, "Invalid UTF-8 should encode consistently")
+	ass.Equal([]int{169, 254, 121}, tokens3, "Invalid UTF-8 should encode as byte-level tokens")
 }
 
 // TestBasicRoundtrip - Ported from test_basic_roundtrip in Python tiktoken

@@ -70,7 +70,7 @@ func (t *Tiktoken) Encode(text string, allowedSpecial []string, disallowedSpecia
 
 	if len(disallowedSpecialSet) > 0 {
 		specialRegex := t.SpecialTokenRegex(disallowedSpecialSet)
-		m := findRegex2StringMatch(text, specialRegex)
+		m := specialRegex.FindString(text)
 		if m != "" {
 			panic(fmt.Sprintf("text contains disallowed special token %s", m))
 		}
@@ -95,10 +95,6 @@ func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regex
 	}
 	specialRegex := regexp.MustCompile(strings.Join(specialRegexStrs, "|"))
 	return specialRegex
-}
-
-func findRegex2StringMatch(text string, reg *regexp.Regexp) string {
-	return reg.FindString(text)
 }
 
 func difference(setA, setB map[string]any) map[string]any {
