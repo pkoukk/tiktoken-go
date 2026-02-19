@@ -303,3 +303,108 @@ func TestEncodeOrdinaryMatchesDisallowedSpecial(t *testing.T) {
 		})
 	}
 }
+
+// TestUnicodeWhitespaceRoundtrip - Inspired by test_hyp_roundtrip and
+// test_catastrophically_repetitive in the reference Python tiktoken.
+// Verifies that text with Unicode whitespace characters (which differ between
+// ASCII \s and Unicode \p{White_Space}) roundtrips correctly through
+// encode/decode across all encodings.
+func TestUnicodeWhitespaceRoundtrip(t *testing.T) {
+	type wsChar struct {
+		name string
+		char string
+	}
+	unicodeWhitespaceChars := []wsChar{
+		{"NBSP", "\u00a0"},
+		{"OGHAM_SPACE", "\u1680"},
+		{"EN_SPACE", "\u2002"},
+		{"EM_SPACE", "\u2003"},
+		{"THIN_SPACE", "\u2009"},
+		{"HAIR_SPACE", "\u200a"},
+		{"LINE_SEPARATOR", "\u2028"},
+		{"PARAGRAPH_SEPARATOR", "\u2029"},
+		{"NARROW_NBSP", "\u202f"},
+		{"IDEOGRAPHIC_SPACE", "\u3000"},
+	}
+
+	encodings := []string{MODEL_R50K_BASE, MODEL_P50K_BASE, MODEL_CL100K_BASE, MODEL_O200K_BASE}
+
+	for _, encName := range encodings {
+		t.Run(encName, func(t *testing.T) {
+			enc, err := GetEncoding(encName)
+			assert.NoError(t, err)
+
+			for _, ws := range unicodeWhitespaceChars {
+				t.Run(ws.name, func(t *testing.T) {
+					// Single character between words
+					text := "hello" + ws.char + "world"
+					tokens := enc.Encode(text, nil, nil)
+					assert.Equal(t, text, enc.Decode(tokens),
+						"Roundtrip failed for %s between words", ws.name)
+
+					// Repeated (inspired by test_catastrophically_repetitive)
+					repeated := strings.Repeat(ws.char, 1000)
+					tokens = enc.Encode(repeated, nil, nil)
+					assert.Equal(t, repeated, enc.Decode(tokens),
+						"Roundtrip failed for repeated %s", ws.name)
+
+					// With prefix and suffix
+					prefixed := " " + repeated
+					tokens = enc.Encode(prefixed, nil, nil)
+					assert.Equal(t, prefixed, enc.Decode(tokens),
+						"Roundtrip failed for prefixed repeated %s", ws.name)
+
+					suffixed := repeated + "\n"
+					tokens = enc.Encode(suffixed, nil, nil)
+					assert.Equal(t, suffixed, enc.Decode(tokens),
+						"Roundtrip failed for suffixed repeated %s", ws.name)
+				})
+			}
+
+			// Mixed Unicode whitespace types in one string
+			t.Run("mixed", func(t *testing.T) {
+				text := "hello\u00a0world\u3000foo\u2003bar\u2009baz"
+				tokens := enc.Encode(text, nil, nil)
+				assert.Equal(t, text, enc.Decode(tokens))
+			})
+
+			// Mixed ASCII and Unicode whitespace
+			t.Run("mixed_ascii_and_unicode", func(t *testing.T) {
+				text := "hello \u00a0 world\t\u3000\nfoo"
+				tokens := enc.Encode(text, nil, nil)
+				assert.Equal(t, text, enc.Decode(tokens))
+			})
+		})
+	}
+}
+
+// TestUnicodeWhitespaceEncodeOrdinaryMatch - Inspired by
+// test_hyp_special_ordinary in the reference Python tiktoken.
+// Verifies EncodeOrdinary produces the same tokens as Encode for text
+// containing Unicode whitespace, ensuring both paths handle it consistently.
+func TestUnicodeWhitespaceEncodeOrdinaryMatch(t *testing.T) {
+	encodings := []string{MODEL_R50K_BASE, MODEL_P50K_BASE, MODEL_CL100K_BASE, MODEL_O200K_BASE}
+
+	testTexts := []string{
+		"hello\u00a0world",
+		"\u00a0\u00a0\u00a0",
+		"test\u3000text\u3000here",
+		"mixed \u00a0 spaces\t\u2003and\nnewlines",
+		"CJK\u3000テスト\u3000测试",
+		strings.Repeat("\u00a0", 100),
+	}
+
+	for _, encName := range encodings {
+		t.Run(encName, func(t *testing.T) {
+			enc, err := GetEncoding(encName)
+			assert.NoError(t, err)
+
+			for _, text := range testTexts {
+				ordinaryTokens := enc.EncodeOrdinary(text)
+				encodeTokens := enc.Encode(text, nil, nil)
+				assert.Equal(t, ordinaryTokens, encodeTokens,
+					"EncodeOrdinary should match Encode for text: %q", text)
+			}
+		})
+	}
+}

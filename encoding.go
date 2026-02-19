@@ -20,6 +20,14 @@ const (
 	MODEL_R50K_BASE   string = "r50k_base"
 )
 
+// unicodeSpaces defines the character class contents matching Unicode's
+// White_Space property. Go's regexp \s only matches ASCII whitespace
+// [\t\n\f\r ], but the reference tiktoken implementation (Python/Rust)
+// uses Unicode-aware \s. This constant ensures parity with the reference
+// for characters like non-breaking space (U+00A0) and ideographic space
+// (U+3000).
+const unicodeSpaces = `\t\n\v\f\r\x{85}\p{Z}`
+
 var MODEL_TO_ENCODING = map[string]string{
 	// chat
 	"gpt-4.5":       MODEL_O200K_BASE,
@@ -140,9 +148,9 @@ func o200k_base() (*Encoding, error) {
 		`[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?`,
 		`[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?`,
 		`\p{N}{1,3}`,
-		` ?[^\s\p{L}\p{N}]+[\r\n/]*`,
-		`\s*[\r\n]+`,
-		`\s+`,
+		` ?[^` + unicodeSpaces + `\p{L}\p{N}]+[\r\n/]*`,
+		`[` + unicodeSpaces + `]*[\r\n]+`,
+		`[` + unicodeSpaces + `]+`,
 	}
 	return &Encoding{
 		Name:           MODEL_O200K_BASE,
@@ -166,7 +174,7 @@ func cl100k_base() (*Encoding, error) {
 	}
 	return &Encoding{
 		Name:           MODEL_CL100K_BASE,
-		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+`,
+		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^` + unicodeSpaces + `\p{L}\p{N}]+[\r\n]*|[` + unicodeSpaces + `]*[\r\n]+|[` + unicodeSpaces + `]+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -180,7 +188,7 @@ func p50k_edit() (*Encoding, error) {
 	special_tokens := map[string]int{ENDOFTEXT: 50256, FIM_PREFIX: 50281, FIM_MIDDLE: 50282, FIM_SUFFIX: 50283}
 	return &Encoding{
 		Name:           MODEL_P50K_EDIT,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^` + unicodeSpaces + `\p{L}\p{N}]+|[` + unicodeSpaces + `]+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -202,7 +210,7 @@ func p50k_base() (*Encoding, error) {
 
 	return &Encoding{
 		Name:           MODEL_P50K_BASE,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^` + unicodeSpaces + `\p{L}\p{N}]+|[` + unicodeSpaces + `]+`,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50281,
@@ -218,7 +226,7 @@ func r50k_base() (*Encoding, error) {
 	return &Encoding{
 		Name:           MODEL_R50K_BASE,
 		MergeableRanks: ranks,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+`,
+		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^` + unicodeSpaces + `\p{L}\p{N}]+|[` + unicodeSpaces + `]+`,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50257,
 	}, nil
