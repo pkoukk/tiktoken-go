@@ -71,7 +71,7 @@ func TestGetEncoding_ErrorResponseNotCached(t *testing.T) {
 	})
 
 	loader := &urlRewriteLoader{
-		realBase: OpenAIPublicHost,
+		realBase: BpeBaseURL,
 		fakeBase: ts.URL,
 		inner:    NewDefaultBpeLoader(),
 	}
