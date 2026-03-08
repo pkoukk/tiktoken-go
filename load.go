@@ -33,6 +33,11 @@ func readFile(blobpath string) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf(
+			"unexpected HTTP status %d (%s) for URL %s",
+			resp.StatusCode, resp.Status, blobpath)
+	}
 	return io.ReadAll(resp.Body)
 }
 

@@ -6,18 +6,24 @@ import (
 	"sync"
 )
 
-const ENDOFTEXT string = "<|endoftext|>"
-const FIM_PREFIX string = "<|fim_prefix|>"
-const FIM_MIDDLE string = "<|fim_middle|>"
-const FIM_SUFFIX string = "<|fim_suffix|>"
-const ENDOFPROMPT string = "<|endofprompt|>"
-
 const (
+	ENDOFTEXT         string = "<|endoftext|>"
+	FIM_PREFIX        string = "<|fim_prefix|>"
+	FIM_MIDDLE        string = "<|fim_middle|>"
+	FIM_SUFFIX        string = "<|fim_suffix|>"
+	ENDOFPROMPT       string = "<|endofprompt|>"
 	MODEL_O200K_BASE  string = "o200k_base"
 	MODEL_CL100K_BASE string = "cl100k_base"
 	MODEL_P50K_BASE   string = "p50k_base"
 	MODEL_P50K_EDIT   string = "p50k_edit"
 	MODEL_R50K_BASE   string = "r50k_base"
+
+	OpenAIPublicHost = "https://openaipublic.blob.core.windows.net"
+
+	O200kBasePath  = "https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken"
+	Cl100kBasePath = "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken"
+	P50kBasePath   = "https://openaipublic.blob.core.windows.net/encodings/p50k_base.tiktoken"
+	R50kBasePath   = "https://openaipublic.blob.core.windows.net/encodings/r50k_base.tiktoken"
 )
 
 var MODEL_TO_ENCODING = map[string]string{
@@ -128,7 +134,7 @@ func initEncoding(encodingName string) (*Encoding, error) {
 }
 
 func o200k_base() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken")
+	ranks, err := bpeLoader.LoadTiktokenBpe(O200kBasePath)
 	if err != nil {
 		return nil, err
 	}
@@ -154,7 +160,7 @@ func o200k_base() (*Encoding, error) {
 }
 
 func cl100k_base() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken")
+	ranks, err := bpeLoader.LoadTiktokenBpe(Cl100kBasePath)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +180,7 @@ func cl100k_base() (*Encoding, error) {
 }
 
 func p50k_edit() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/p50k_base.tiktoken")
+	ranks, err := bpeLoader.LoadTiktokenBpe(P50kBasePath)
 	if err != nil {
 		return nil, err
 	}
@@ -188,7 +194,7 @@ func p50k_edit() (*Encoding, error) {
 }
 
 func p50k_base() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/p50k_base.tiktoken")
+	ranks, err := bpeLoader.LoadTiktokenBpe(P50kBasePath)
 	if err != nil {
 		return nil, err
 	}
@@ -211,7 +217,7 @@ func p50k_base() (*Encoding, error) {
 }
 
 func r50k_base() (*Encoding, error) {
-	ranks, err := bpeLoader.LoadTiktokenBpe("https://openaipublic.blob.core.windows.net/encodings/r50k_base.tiktoken")
+	ranks, err := bpeLoader.LoadTiktokenBpe(R50kBasePath)
 	if err != nil {
 		return nil, err
 	}
