@@ -3,7 +3,7 @@ module github.com/pkoukk/tiktoken-go
 go 1.19
 
 require (
-	github.com/dlclark/regexp2 v1.10.0
+	github.com/dlclark/regexp2 v1.11.5-0.20240806004527-5bbbed8ea10b
 	github.com/google/uuid v1.3.0
 	github.com/stretchr/testify v1.8.2
 )

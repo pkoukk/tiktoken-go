@@ -2,8 +2,9 @@ package tiktoken
 
 import (
 	"errors"
-	"strings"
 	"sync"
+
+	"github.com/dlclark/regexp2"
 )
 
 const (
@@ -92,7 +93,7 @@ func init() {
 
 type Encoding struct {
 	Name           string
-	PatStr         string
+	Pat            *regexp2.Regexp
 	MergeableRanks map[string]int
 	SpecialTokens  map[string]int
 	ExplicitNVocab int
@@ -142,18 +143,10 @@ func o200k_base() (*Encoding, error) {
 		ENDOFTEXT:   199999,
 		ENDOFPROMPT: 200018,
 	}
-	pats := []string{
-		`[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?`,
-		`[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?`,
-		`\p{N}{1,3}`,
-		` ?[^\s\p{L}\p{N}]+[\r\n/]*`,
-		`\s*[\r\n]+`,
-		`\s+(?!\S)`,
-		`\s+`,
-	}
+	reg := regexp2.MustCompile(`[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?|[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n/]*|\s*[\r\n]+|\s+(?!\S)|\s+`, 0)
 	return &Encoding{
 		Name:           MODEL_O200K_BASE,
-		PatStr:         strings.Join(pats, "|"),
+		Pat:            reg,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -171,9 +164,10 @@ func cl100k_base() (*Encoding, error) {
 		FIM_SUFFIX:  100260,
 		ENDOFPROMPT: 100276,
 	}
+	reg := regexp2.MustCompile(`(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`, 0)
 	return &Encoding{
 		Name:           MODEL_CL100K_BASE,
-		PatStr:         `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`,
+		Pat:            reg,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -185,9 +179,10 @@ func p50k_edit() (*Encoding, error) {
 		return nil, err
 	}
 	special_tokens := map[string]int{ENDOFTEXT: 50256, FIM_PREFIX: 50281, FIM_MIDDLE: 50282, FIM_SUFFIX: 50283}
+	reg := regexp2.MustCompile(`'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`, 0)
 	return &Encoding{
 		Name:           MODEL_P50K_EDIT,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		Pat:            reg,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 	}, nil
@@ -207,9 +202,10 @@ func p50k_base() (*Encoding, error) {
 	// 	return nil, errors.New("special_tokens and ranks must be disjoint")
 	// }
 
+	reg := regexp2.MustCompile(`'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`, 0)
 	return &Encoding{
 		Name:           MODEL_P50K_BASE,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		Pat:            reg,
 		MergeableRanks: ranks,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50281,
@@ -222,10 +218,11 @@ func r50k_base() (*Encoding, error) {
 		return nil, err
 	}
 	special_tokens := map[string]int{ENDOFTEXT: 50256}
+	reg := regexp2.MustCompile(`'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`, 0)
 	return &Encoding{
 		Name:           MODEL_R50K_BASE,
 		MergeableRanks: ranks,
-		PatStr:         `'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`,
+		Pat:            reg,
 		SpecialTokens:  special_tokens,
 		ExplicitNVocab: 50257,
 	}, nil

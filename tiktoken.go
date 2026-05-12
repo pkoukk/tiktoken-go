@@ -19,7 +19,7 @@ func GetEncoding(encodingName string) (*Tiktoken, error) {
 	if err != nil {
 		return nil, err
 	}
-	pbe, err := NewCoreBPE(enc.MergeableRanks, enc.SpecialTokens, enc.PatStr)
+	pbe, err := NewCoreBPE(enc.MergeableRanks, enc.SpecialTokens, enc.Pat)
 	if err != nil {
 		return nil, err
 	}

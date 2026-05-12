@@ -21,12 +21,7 @@ type CoreBPE struct {
 	sortedTokenBytes     [][]byte
 }
 
-func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, pattern string) (*CoreBPE, error) {
-	regex, err := regexp2.Compile(pattern, regexp2.None)
-	if err != nil {
-		return nil, fmt.Errorf("error compiling regex: %s", err)
-	}
-
+func NewCoreBPE(encoder map[string]int, specialTokensEncoder map[string]int, regex *regexp2.Regexp) (*CoreBPE, error) {
 	specialRegexStrs := make([]string, 0, len(specialTokensEncoder))
 	for k := range specialTokensEncoder {
 		specialRegexStrs = append(specialRegexStrs, regexp.QuoteMeta(k))
