@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pkoukk/tiktoken-go"
+	"github.com/bakks/tiktoken-go"
 )
 
 // go test -benchmem -run=^$ -bench ^BenchmarkEncodingInFullLanguage$ -benchtime=100000x github.com/pkoukk/tiktoken-go/test

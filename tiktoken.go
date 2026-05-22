@@ -90,6 +90,10 @@ func (t *Tiktoken) Decode(tokens []int) string {
 	return string(t.bpe.decodeNative(tokens))
 }
 
+func (t *Tiktoken) EncoderName() string {
+	return t.pbeEncoding.Name
+}
+
 func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regexp2.Regexp {
 	specialRegexStrs := make([]string, 0, len(disallowedSpecialSet))
 	for k := range disallowedSpecialSet {
