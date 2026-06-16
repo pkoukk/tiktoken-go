@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dlclark/regexp2"
+	"github.com/dlclark/regexp2/v2"
 )
 
 type CoreBPE struct {
@@ -162,8 +162,8 @@ func findRegex2StringIndex(text string, reg *regexp2.Regexp) []int {
 		return nil
 	}
 	result := make([]int, 2)
-	result[0] = m.Index
-	result[1] = m.Index + m.Length
+	result[0] = m.RuneIndex
+	result[1] = m.RuneIndex + m.RuneLength
 	return result
 }
 
@@ -172,8 +172,8 @@ func findRegex2AllStringMatchIndex(text string, reg *regexp2.Regexp) [][]int {
 	m, _ := reg.FindStringMatch(text)
 	for m != nil {
 		result := make([]int, 2)
-		result[0] = m.Index
-		result[1] = m.Index + m.Length
+		result[0] = m.RuneIndex
+		result[1] = m.RuneIndex + m.RuneLength
 		matches = append(matches, result)
 		m, _ = reg.FindNextMatch(m)
 	}
