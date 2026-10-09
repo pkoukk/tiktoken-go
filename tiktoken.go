@@ -87,7 +87,7 @@ func (t *Tiktoken) EncodeOrdinary(text string) []int {
 }
 
 func (t *Tiktoken) Decode(tokens []int) string {
-	return string(t.bpe.decodeNative(tokens))
+	return strings.ToValidUTF8(string(t.bpe.decodeNative(tokens)), "\uFFFD")
 }
 
 func (t *Tiktoken) SpecialTokenRegex(disallowedSpecialSet map[string]any) *regexp2.Regexp {

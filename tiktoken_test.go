@@ -46,6 +46,29 @@ func TestDecoding(t *testing.T) {
 	ass.Equal("hello world!你好，世界！", txt, "Decoding should be equal")
 }
 
+func TestDecodingInvalidUTF8(t *testing.T) {
+	ass := assert.New(t)
+	t.Cleanup(func() {
+		l.Lock()
+		delete(encodingMap, MODEL_O200K_BASE)
+		l.Unlock()
+	})
+
+	enc, err := GetEncoding(MODEL_O200K_BASE)
+	ass.Nil(err, "Encoding  init should not be nil")
+
+	// 35895 is a truncated 3-byte UTF-8 sequence, which byte-level BPE allows but
+	// which is not valid on its own. Decoding must collapse it into a single U+FFFD,
+	// matching tiktoken's errors="replace", so the text survives an encode/decode cycle.
+	text := enc.Decode([]int{35895})
+	ass.Equal("�", text, "Decoding should collapse invalid bytes into a single U+FFFD")
+
+	ids := enc.EncodeOrdinary(text)
+	ass.Equal([]int{3251}, ids, "Encoding should be equal")
+
+	ass.Equal(text, enc.Decode(ids), "Decoding after an encode/decode cycle should be stable")
+}
+
 type urlRewriteLoader struct {
 	realBase string
 	fakeBase string
