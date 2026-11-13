@@ -7,9 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEncoding(t *testing.T) {
@@ -115,11 +114,11 @@ func TestEncodingForModel_GPT5Prefix(t *testing.T) {
 		"gpt-5-nano-2025-08-07",
 	}
 
-	ass := assert.New(t)
-	req := require.New(t)
-
 	for _, model := range models {
 		t.Run("Check model "+model, func(t *testing.T) {
+			ass := assert.New(t)
+			req := require.New(t)
+
 			tkm, err := EncodingForModel(model)
 			req.NoError(err)
 			ass.Equal(MODEL_O200K_BASE, tkm.pbeEncoding.Name)
