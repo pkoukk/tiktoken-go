@@ -99,9 +99,6 @@ func main()  {
 ```
 
 ### 计算chat API消息当中的token消耗
-这段代码根据[官方示例](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)编写
-
-编写时间： `2023-06-28`
 
 请注意，消息的token计算方式可能随时会发生改变，以下代码并不一定在将来适用，如果您需要精确的计算，请关注官方文档。
 
@@ -112,6 +109,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
@@ -126,30 +125,18 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 	}
 
 	var tokensPerMessage, tokensPerName int
-	switch model {
-	case "gpt-3.5-turbo-0613",
-		"gpt-3.5-turbo-16k-0613",
-		"gpt-4-0314",
-		"gpt-4-32k-0314",
-		"gpt-4-0613",
-		"gpt-4-32k-0613":
-		tokensPerMessage = 3
-		tokensPerName = 1
-	case "gpt-3.5-turbo-0301":
+	switch {
+	case model == "gpt-3.5-turbo-0301":
 		tokensPerMessage = 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 		tokensPerName = -1   // if there's a name, the role is omitted
+	case strings.HasPrefix(model, "gpt-3.5-turbo"),
+		strings.HasPrefix(model, "gpt-4"),
+		strings.HasPrefix(model, "gpt-5"):
+		tokensPerMessage = 3
+		tokensPerName = 1
 	default:
-		if strings.Contains(model, "gpt-3.5-turbo") {
-			log.Println("warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0613.")
-			return NumTokensFromMessages(messages, "gpt-3.5-turbo-0613")
-		} else if strings.Contains(model, "gpt-4") {
-			log.Println("warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.")
-			return NumTokensFromMessages(messages, "gpt-4-0613")
-		} else {
-			err = fmt.Errorf("num_tokens_from_messages() is not implemented for model %s. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens.", model)
-			log.Println(err)
-			return
-		}
+		log.Printf("num tokens from messages is not implemented for model %s", model)
+		return
 	}
 
 	for _, message := range messages {
@@ -169,7 +156,7 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # available encodings
  | Encoding name           | OpenAI models                                        |
  | ----------------------- | ---------------------------------------------------- |
- | `o200k_base`            | `gpt-4o`                                             |
+ | `o200k_base`            | `gpt-4o`, `gpt-4.1`, `gpt-4.5`, `gpt-5`              |
  | `cl100k_base`           | `gpt-4`, `gpt-3.5-turbo`, `text-embedding-ada-002`, 	`text-embedding-3-small`, `text-embedding-3-large`   |
  | `p50k_base`             | Codex models, `text-davinci-002`, `text-davinci-003` |
  | `r50k_base` (or `gpt2`) | GPT-3 models like `davinci`                          |
@@ -178,6 +165,10 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 # available models
 | Model name                   | OpenAI models |
 | ---------------------------- | ------------- |
+| gpt-5*                       | o200k_base    |
+| gpt-4.5-*                    | o200k_base    |
+| gpt-4.1-*                    | o200k_base    |
+| gpt-4o                       | o200k_base    |
 | gpt-4o-*                     | o200k_base    |
 | gpt-4                        | cl100k_base   |
 | gpt-4-*                      | cl100k_base   |
