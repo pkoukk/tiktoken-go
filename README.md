@@ -197,6 +197,8 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 
 | Model name                   | OpenAI models |
 |------------------------------|---------------|
+| gpt-5                        | o200k_base    |
+| gpt-5-*                      | o200k_base    |
 | gpt-4.5-*                    | o200k_base    |
 | gpt-4.1-*                    | o200k_base    |
 | gpt-4o-*                     | o200k_base    |

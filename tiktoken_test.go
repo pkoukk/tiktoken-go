@@ -7,8 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEncoding(t *testing.T) {
@@ -38,7 +39,6 @@ func TestEncoding(t *testing.T) {
 
 func TestDecoding(t *testing.T) {
 	ass := assert.New(t)
-	// enc, err := GetEncoding("cl100k_base")
 	enc, err := GetEncoding(MODEL_CL100K_BASE)
 	ass.Nil(err, "Encoding  init should not be nil")
 	sourceTokens := []int{15339, 1917, 0, 57668, 53901, 3922, 3574, 244, 98220, 6447}
@@ -104,6 +104,34 @@ func TestEncodingForModel_Prefixes(t *testing.T) {
 			testEncodingForModel(t, prefix)
 		})
 	}
+}
+
+func TestEncodingForModel_GPT5Prefix(t *testing.T) {
+	models := []string{
+		"gpt-5.1",
+		"gpt-5.1-codex",
+		"gpt-5.2",
+		"gpt-5-mini",
+		"gpt-5-nano-2025-08-07",
+	}
+
+	ass := assert.New(t)
+	req := require.New(t)
+
+	for _, model := range models {
+		t.Run("Check model "+model, func(t *testing.T) {
+			tkm, err := EncodingForModel(model)
+			req.NoError(err)
+			ass.Equal(MODEL_O200K_BASE, tkm.pbeEncoding.Name)
+		})
+	}
+}
+
+func TestEncodingForModel_Unknown(t *testing.T) {
+	ass := assert.New(t)
+	got, err := EncodingForModel("gpt-x")
+	ass.Error(err)
+	ass.Nil(got)
 }
 
 func testEncodingForModel(t *testing.T, model string) {

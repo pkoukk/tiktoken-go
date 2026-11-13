@@ -28,6 +28,7 @@ const (
 
 var MODEL_TO_ENCODING = map[string]string{
 	// chat
+	"gpt-5":         MODEL_O200K_BASE,
 	"gpt-4.5":       MODEL_O200K_BASE,
 	"gpt-4.1":       MODEL_O200K_BASE,
 	"gpt-4o":        MODEL_O200K_BASE,
@@ -75,6 +76,7 @@ var MODEL_TO_ENCODING = map[string]string{
 
 var MODEL_PREFIX_TO_ENCODING = map[string]string{
 	// chat
+	"gpt-5":          MODEL_O200K_BASE,  // e.g., gpt-5, gpt-5.1, gpt-5-mini, gpt-5-nano-2025-08-07, etc.
 	"gpt-4.5-":       MODEL_O200K_BASE,  // e.g., gpt-4.5-preview, etc.
 	"gpt-4.1-":       MODEL_O200K_BASE,  // e.g., gpt-4.1-2025-04-14, etc.
 	"gpt-4o-":        MODEL_O200K_BASE,  // e.g., gpt-4o-2024-05-13, etc.
