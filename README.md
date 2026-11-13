@@ -110,11 +110,7 @@ func main() {
 
 ### Counting Tokens For Chat API Calls
 
-Below is an example function for counting tokens for messages passed to gpt-3.5-turbo or gpt-4.
-
-The following code was written based
-on [openai-cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
-examples at `Wednesday, 28 June 2023`.
+Below is an example function for counting tokens for messages passed to gpt-3.5-turbo, gpt-4, gpt-4o, gpt-4.1, gpt-4.5 or gpt-5 series models.
 
 Please note that the token calculation method for the message may change at any time, so this code may not necessarily
 be applicable in the future.
@@ -128,12 +124,15 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
 )
 
-// OpenAI Cookbook: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+// Based on the OpenAI Cookbook: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+// Per-message overhead for gpt-4.1, gpt-4.5 and gpt-5 models is assumed to match gpt-4o.
 func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string) (numTokens int) {
 	tkm, err := tiktoken.EncodingForModel(model)
 	if err != nil {
@@ -143,30 +142,18 @@ func NumTokensFromMessages(messages []openai.ChatCompletionMessage, model string
 	}
 
 	var tokensPerMessage, tokensPerName int
-	switch model {
-	case "gpt-3.5-turbo-0613",
-		"gpt-3.5-turbo-16k-0613",
-		"gpt-4-0314",
-		"gpt-4-32k-0314",
-		"gpt-4-0613",
-		"gpt-4-32k-0613":
-		tokensPerMessage = 3
-		tokensPerName = 1
-	case "gpt-3.5-turbo-0301":
+	switch {
+	case model == "gpt-3.5-turbo-0301":
 		tokensPerMessage = 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 		tokensPerName = -1   // if there's a name, the role is omitted
+	case strings.HasPrefix(model, "gpt-3.5-turbo"),
+		strings.HasPrefix(model, "gpt-4"),
+		strings.HasPrefix(model, "gpt-5"):
+		tokensPerMessage = 3
+		tokensPerName = 1
 	default:
-		if strings.Contains(model, "gpt-3.5-turbo") {
-			log.Println("warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0613.")
-			return NumTokensFromMessages(messages, "gpt-3.5-turbo-0613")
-		} else if strings.Contains(model, "gpt-4") {
-			log.Println("warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.")
-			return NumTokensFromMessages(messages, "gpt-4-0613")
-		} else {
-			err = fmt.Errorf("num_tokens_from_messages() is not implemented for model %s. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens.", model)
-			log.Println(err)
-			return
-		}
+		log.Printf("num tokens from messages is not implemented for model %s", model)
+		return
 	}
 
 	for _, message := range messages {
